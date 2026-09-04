@@ -7,48 +7,55 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">    
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="#profile" class="brand">Danar</a>
+            <a href="#home" class="brand">Danar</a>
             <nav>
-                <a href="#profile">Profile</a>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#edu">Educations</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="hero" id="profile">
+        <section class="hero" id="home">
             <div class="container hero-grid">
                 <div class="hero-identity">
-                    <p class="hero-kicker">Information System &middot; Universitas Indonesia</p>
+                    <p class="hero-kicker">Hi, I'm</p>
                     <h1>Danar Iqbal Abi Zaidan Suharso</h1>
                 </div>
-                <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/danar.png" alt="Photo of Danar">
+                <div class="hero-content">
+                    <p class="hero-tagline">Information Systems Student at the University of Indonesia</p>
+                    <p class="hero-description">
+                        Passionate about developments in the IT and business sectors.
+                    </p>
+                <div class="hero-actions">
+                    <a href="#projects" class="button button-primary">My Projects</a>
+                    <a href="#contact" class="button button-secondary">Contact Me</a>
                 </div>
-                <div class="hero-details">
-                    <p class="bio">Currently studying at the University of Indonesia majoring in Information Systems. I have experience and in-depth understanding of the field of technology, especially in the field of computing systems. I am able to analyze the opportunities for using computer technology in a business system that needs to be studied in depth.</p>
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>2506534371</dd>
-                        </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>S1 Sistem Informasi</dd>
-                        </div>
-                    </dl>
                     <div class="social-links">
                         <a href="https://github.com/danariqbalabi" class="social-link">GitHub</a>
                         <a href="https://www.linkedin.com/in/danar-iqbal-abi-zaidan-suharso?_l=en_US" class="social-link">LinkedIn</a>
                         <a href="mailto:danariqbalabi0210@gmail.com" class="social-link">Email</a>
                     </div>
                 </div>
+
+            <div class="hero-photo">
+                <div class="photo-block"></div>
+                <img class="avatar" src="/static/img/danar.png" alt="Photo of Danar">
             </div>
+            </div>
+        </section>
+        <section class="about" id="about">
         </section>
     </main>
 
