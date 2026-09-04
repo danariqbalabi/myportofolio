@@ -121,20 +121,24 @@ h1, .brand {
 
 .social-links {
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 0.75rem;
     flex-wrap: wrap;
 }
 
 .social-link {
-    display: inline-block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--paper);
-    background-color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
     border-radius: var(--radius);
-    padding: 0.5rem 1.1rem;
-    transition: background-color 0.2s ease;
+}
+
+.social-link img {
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 .social-link:hover {
@@ -191,6 +195,12 @@ h1, .brand {
 
     .social-links {
         justify-content: flex-start;
+    }
+        .about-grid {
+        grid-template-columns: 1fr;
+    }
+    .about-cards {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -251,9 +261,68 @@ h1, .brand {
     color: var(--accent);
 }
 
+.section-kicker {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
 .about {
     padding: 4rem 0;
     border-top: 1px solid var(--line);
+}
+
+.about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.about-text {
+    color: var(--text-muted);
+    margin-bottom: 0.85rem;
+    font-size: 0.90rem;
+    max-width: 360px;
+}
+
+.about-cards {
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    gap: 0.5rem;
+}
+
+.about-card {
+    padding: 0.80rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.about-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+}
+
+.about-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.about-box {
+    padding: 2.5rem;
+    background-color: rgba(232, 245, 233, 0.05);
+    border: 1px solid rgba(232, 245, 233, 0.14);
+    border-radius: var(--radius);
+}
+
+.about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
 }
 
 nav ul {
