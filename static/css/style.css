@@ -19,6 +19,7 @@ body {
     color: var(--ink);
     background-color: var(--paper);
     line-height: 1.6;
+    background-image: radial-gradient(circle at 75% 15%, rgba(0, 255, 136, 0.12), transparent 45%);
 }
 
 h1, .brand {
@@ -62,6 +63,9 @@ h1, .brand {
 
 .hero {
     padding: 4.5rem 0 5rem;
+    background-image: radial-gradient(var(--line) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: -12px -12px;
 }
 
 .hero-grid {
@@ -152,7 +156,7 @@ h1, .brand {
 }
 
 .photo-block {
-    position: absolute;
+   position: absolute;
     top: 1.25rem;
     left: 1.25rem;
     width: 100%;
@@ -160,6 +164,8 @@ h1, .brand {
     background-color: var(--accent);
     border-radius: var(--radius);
     z-index: 0;
+    filter: blur(40px);
+    opacity: 0.35;
 }
 
 .avatar {
@@ -171,6 +177,7 @@ h1, .brand {
     object-fit: cover;
     border-radius: var(--radius);
     border: 3px solid var(--ink);
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.25);
 }
 
 .site-footer {
@@ -458,7 +465,7 @@ nav ul {
 }
 
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
     .experience-layout {
         grid-template-columns: 1fr;
     }
@@ -470,4 +477,11 @@ nav ul {
         flex: 1;
         min-width: 140px;
     }
+}
+
+.experience-box {
+    padding: 2.5rem;
+    background-color: rgba(232, 245, 233, 0.05);
+    border: 1px solid rgba(232, 245, 233, 0.14);
+    border-radius: var(--radius);
 }
