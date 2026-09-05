@@ -41,6 +41,7 @@ h1, .brand {
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
+    gap: 1.5rem;
 }
 
 .brand {
@@ -53,6 +54,7 @@ h1, .brand {
 .site-header nav {
     display: flex;
     gap: 2rem;
+    align-items: center;
 }
 
 .site-header nav a {
@@ -336,6 +338,7 @@ nav ul {
     display: flex;
     gap: 2rem;
     list-style: none;
+    align-items: center;
 }
 
 .experience {
