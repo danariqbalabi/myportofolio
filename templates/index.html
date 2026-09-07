@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+
+    <!-- HEADER: Untuk brand, nav, cv button -->
     <header class="site-header">
         <div class="container">
             <a href="#home" class="brand">Danar</a>
@@ -23,283 +25,306 @@
                     <li><a href="#contact">Contact</a></li>
                 </ul>
                 <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">
-            Download CV
+            Download CV <!-- untuk download cv -->
             </a>
             </nav>
         </div>
     </header>
 
     <main>
+        <!-- Hero Section: Intro + photo  -->
         <section class="hero" id="home">
             <div class="container hero-grid">
+                <!-- left column, top: greeting + name -->
                 <div class="hero-identity">
                     <p class="hero-kicker">Hi, I'm</p>
                     <h1>Danar Iqbal Abi Zaidan</h1>
                 </div>
+
+                <!-- Left column, bottom: tagline, description, CTAs, socials -->
                 <div class="hero-content">
                     <p class="hero-tagline">Information Systems Student at the University of Indonesia</p>
                     <p class="hero-description">
                         Passionate about developments in the IT and business sectors.
                     </p>
+                    <!-- CTA buttons: "My Update" scrolls ke #highlights, "Contact Me" ke #contact -->
                 <div class="hero-actions">
                     <a href="#highlights" class="button button-primary">My Update > </a>
                     <a href="#contact" class="button button-secondary">Contact Me</a>
                 </div>
-                    <div class="social-links">
-                        <p> Let's Connect!</p>
-                        <a href="https://github.com/danariqbalabi" class="social-link" aria-label="Github">
-                            <img src="/static/img/github.svg" alt="">
-                        </a>
-                        <a href="https://www.linkedin.com/in/danar-iqbal-abi-zaidan-suharso?_l=en_US" class="social-link" aria-label="LinkedIn">
-                            <img src="/static/img/linkedin.svg" alt="">
-                        </a>
-                        <a href="mailto:danariqbalabi0210@gmail.com" class="social-link" aria-label="Email">
-                            <img src="/static/img/email.svg" alt="">
-                        </a>
+
+                <!-- Social links row -->
+                <div class="social-links">
+                    <p> Let's Connect!</p>
+                    <a href="https://github.com/danariqbalabi" class="social-link" aria-label="Github">
+                        <img src="/static/img/github.svg" alt="">
+                    </a>
+                    <a href="https://www.linkedin.com/in/danar-iqbal-abi-zaidan-suharso?_l=en_US" class="social-link" aria-label="LinkedIn">
+                        <img src="/static/img/linkedin.svg" alt="">
+                    </a>
+                    <a href="mailto:danariqbalabi0210@gmail.com" class="social-link" aria-label="Email">
+                        <img src="/static/img/email.svg" alt="">
+                    </a>
                     </div>
                 </div>
 
-            <div class="hero-photo">
-                <div class="photo-block"></div>
-                <img class="avatar" src="/static/img/danar.png" alt="Photo of Danar">
-            </div>
+                <!-- right column: profile photo dengan glow-->
+                <div class="hero-photo">
+                    <div class="photo-block"></div>
+                    <img class="avatar" src="/static/img/danar.png" alt="Photo of Danar">
+                </div>
             </div>
         </section>
 
+        <!-- Section About-->
         <section class="about" id="about">
             <div class="container">
             <p class="section-kicker">About Me</p>
                 <div class="about-box">
                     <div class="about-layout">
+
+                        <!-- Left col: bio text -->
                         <div class="about-intro">
                             <p class="about-text">
                             An Information Systems student with a keen interest in the dynamic evolution of the business and technology sectors.
                             </p>
-                            </div>
-                            <dl class="meta-list">
-                                    <div class="meta-row">
-                                        <dt>NPM</dt>
-                                        <dd>2506534371</dd>
-                                    </div>
-                                    <div class="meta-row">
-                                        <dt>Program</dt>
-                                        <dd>S1 Sistem Informasi</dd>
-                                    </div>
-                                </dl>
-                            </div>
+                        </div>
 
-                        <div class="about-cards">
-                            <article class="about-card">
-                                <h3>Location</h3>
-                                    <p>Depok, West Java</p>
-                                    </article>
-                            <article class="about-card">
-                                <h3>Interest</h3>
-                                    <p>Collaborations in technology and business</p>
-                                    </article>
-                            <article class="about-card">
-                                <h3>Hobby</h3>
-                                    <p>Solve your problem.</p>
-                                    </article>
-                                </div>
+                        <!-- Right: NPM / jurusan key value info -->
+                        <dl class="meta-list">
+                            <div class="meta-row">
+                                <dt>NPM</dt>
+                                <dd>2506534371</dd>
                             </div>
+                            <div class="meta-row">
+                                <dt>Program</dt>
+                                <dd>S1 Sistem Informasi</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- fact cards: Location, Interest, Hobby -->
+                    <div class="about-cards">
+                        <article class="about-card">
+                            <h3>Location</h3>
+                            <p>Depok, West Java</p>
+                        </article>
+                        <article class="about-card">
+                            <h3>Interest</h3>
+                            <p>Collaborations in technology and business</p>
+                        </article>
+                        <article class="about-card">
+                            <h3>Hobby</h3>
+                            <p>Solve your problem.</p>
+                        </article>
                         </div>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
 
-                <section class="experience" id="exp">
-                    <div class="container">
-                        <p class="section-kicker">Experience</p>
-                        <div class="experience-box">
+        <!-- EXPERIENCE Section: timeline experience + clickable statts cards-->
+        <section class="experience" id="exp">
+            <div class="container">
+            <p class="section-kicker">Experience</p>
+                <div class="experience-box">
 
-                        <input type="checkbox" id="toggle-experience" class="stats-toggle">
-                        <input type="checkbox" id="toggle-competition" class="stats-toggle">
-                        <div class="experience-layout">
-                            <div class="timeline">
-                                <div class="timeline-item">
-                                    <img src="/static/img/openhouse.png" alt="Open House Fasilko UI Logo" class="timeline-photo">
-                                    <div class="timeline-body">
+                <!-- hidden checkboxes: klik untuk buka extra panel tanpa JavaScript, pakai checked-->
+                <input type="checkbox" id="toggle-experience" class="stats-toggle">
+                <input type="checkbox" id="toggle-competition" class="stats-toggle">
+                    <div class="experience-layout">
+
+                        <!-- Timeline: organizational / leadership history -->
+                        <div class="timeline">
+                            <div class="timeline-item">
+                            <img src="/static/img/openhouse.png" alt="Open House Fasilko UI Logo" class="timeline-photo">
+                                <div class="timeline-body">
                                     <div class="timeline-title">
                                     <p>VPIC Of Public Relations</p>
                                     <span class="timeline-date">Aug 2026 - Present</span> 
                                     </div>                               
-                                    <p class="timeline-org">Open House Fasilkom UI 2026</p>
+                                <p class="timeline-org">Open House Fasilkom UI 2026</p>
                                 <p class="timeline-desc">Vice Person in Charge of Public Relations Division</p>
                                 </div>
-                                </div>
-                                <div class="timeline-item timeline-item--branched">
-                                    <img src="/static/img/ristek.png" alt="RISTEK Fasilkom UI logo" class="timeline-photo">
-                                     <div class="timeline-body">
-                                <div class="timeline-branch">
-                                    <div class="timeline-title">
-                                        <p>RISTEK Fasilkom UI</p>
-                                        </div>
-                                        <div class="timeline-branch-title">
-                                        <p class="timeline-org">
-                                            Member of Product & Project Management of RISTEK Fasilkom UI 2026
-                                        </p>
-                                        <span class="timeline-date">Mar 2026 - Present</span>
-                                    </div>
-                                    <p class="timeline-desc">
-                                        Member of Product & Project Management RISTEK Fasilkom UI
-                                    </p>                                
-                                </div>
-                                <div class="timeline-branch">
-                                <div class="timeline-branch-title">
-                                        <p class="timeline-org">Marketing Manager of RISTEK Hackathon 2026</p>
-                                        <span class="timeline-date">Jul 2026 - Aug 2026</span>
-                                        </div>
-                                    <p class="timeline-desc">
-                                        Marketing Manager of RISTEK Hackathon Fasilkom UI</p>                              
                             </div>
-                            </div>
-                            </div>
-                            <div class="timeline-item">
-                                <img src="/static/img/bu.png" alt="Kemendikbud logo" class="timeline-photo">
+
+                            <!-- "branched" item: khusus RISTEK karena ada 2 timeline dlm 1 organisasi-->
+                            <div class="timeline-item timeline-item--branched">
+                            <img src="/static/img/ristek.png" alt="RISTEK Fasilkom UI logo" class="timeline-photo">
                                 <div class="timeline-body">
-                                    <div class="timeline-title">
-                                    <p>Awardee of Beasiswa Unggulan</p>
-                                    <span class="timeline-date">Oct 2025 - Present</span>  
-                                    </div>                                  
-                                    <p class="timeline-org">Kementrian Pendidikan dan Kebudayaan</p>
-                                    <p class="timeline-desc">Awardee of Beasiswa Unggulan from Kemendikbud</p>
+                                    <div class="timeline-branch">
+                                        <div class="timeline-title">
+                                            <p>RISTEK Fasilkom UI</p>
+                                        </div>
+                                    <div class="timeline-branch-title">
+                                    <p class="timeline-org">Member of Product & Project Management of RISTEK Fasilkom UI 2026</p>
+                                    <span class="timeline-date">Mar 2026 - Present</span>
+                                    </div>
+                                    <p class="timeline-desc">Member of Product & Project Management RISTEK Fasilkom UI</p>                                
                                 </div>
+                            <div class="timeline-branch">
+                            <div class="timeline-branch-title">
+                                <p class="timeline-org">Marketing Manager of RISTEK Hackathon 2026</p>
+                                <span class="timeline-date">Jul 2026 - Aug 2026</span>
+                                </div>
+                                <p class="timeline-desc">Marketing Manager of RISTEK Hackathon Fasilkom UI</p>                              
                             </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <img src="/static/img/bu.png" alt="Kemendikbud logo" class="timeline-photo">
+                        <div class="timeline-body">
+                            <div class="timeline-title">
+                            <p>Awardee of Beasiswa Unggulan</p>
+                            <span class="timeline-date">Oct 2025 - Present</span>  
+                            </div>                                  
+                            <p class="timeline-org">Kementrian Pendidikan dan Kebudayaan</p>
+                            <p class="timeline-desc">Awardee of Beasiswa Unggulan from Kemendikbud</p>
                             </div>
-                        <div class="stats-grid">
-            <label for="toggle-experience" class="stat-card stat-card--clickable">
-                <span class="stat-number">5+</span>
-                <span class="stat-label">Experiences</span>
-                <span class="stat-hint">Klik buat update</span>
-            </label>
-            <label for="toggle-competition" class="stat-card stat-card--clickable">
-                <span class="stat-number">10+</span>
-                <span class="stat-label">Competitions</span>
-                <span class="stat-hint">Klik buat riwayat</span>
-            </label>
-            <div class="stat-card">
-                <span class="stat-number">1+</span>
-                <span class="stat-label">Years Learning</span>
+                        </div>
+                    </div>
+
+                    <!-- Stat cards: clickable link -->
+                    <div class="stats-grid">
+                    <label for="toggle-experience" class="stat-card stat-card--clickable">
+                        <span class="stat-number">3+</span>
+                        <span class="stat-label">Experiences</span>
+                        <span class="stat-hint">Klik Untuk Detail</span>
+                    </label>
+                    <label for="toggle-competition" class="stat-card stat-card--clickable">
+                        <span class="stat-number">3+</span>
+                        <span class="stat-label">Competitions</span>
+                        <span class="stat-hint">Klik Untuk Detail</span>
+                    </label>
+                    <div class="stat-card">
+                        <span class="stat-number">1+</span>
+                        <span class="stat-label">Years Learning</span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-        <div class="extra-panel extra-panel--experience">
-        <h4 class="extra-panel-title">Latest Update</h4>
-        <div class="extra-item">
-            <p class="extra-item-title">Academic Exchange — University of Malaya</p>
-            <span class="extra-item-date">2026</span>
-            <p class="extra-item-desc">Completed a 5-day academic exchange program at University of Malaya.</p>
-        </div>
-    </div>
-        <div class="extra-panel extra-panel--competition">
-        <h4 class="extra-panel-title">Competition History</h4>
-        <div class="extra-item">
-            <p class="extra-item-title">Semifinalist — BPC UISP 2025</p>
-            <p class="extra-item-desc">Product: Bring.In</p>
-        </div>
-        <div class="extra-item">
-            <p class="extra-item-title">3rd Winner — Mini Case Competition Pekan RISTEK 2025</p>
-        </div>
-        <div class="extra-item">
-            <p class="extra-item-title">Semifinalist — BPC EPIC 11th by OUFEST</p>
-            <p class="extra-item-desc">Product: Bring.In</p>
-        </div>
-    </div>
-    </div>
+
+            <!-- Extra panel: muncul hanya jika #toggle-experience di klik (checked) -->
+                <div class="extra-panel extra-panel--experience">
+                <h4 class="extra-panel-title">Latest Update</h4>
+                <div class="extra-item">
+                    <p class="extra-item-title">Academic Exchange: University of Malaya</p>
+                    <span class="extra-item-date">2026</span>
+                    <p class="extra-item-desc">Completed a 5-day academic exchange program at University of Malaya.</p>
+                </div>
+            </div>
+            <!-- Extra panel: muncul hanya jika #toggle-competition di klik (checked) -->
+                <div class="extra-panel extra-panel--competition">
+                <h4 class="extra-panel-title">Competition History</h4>
+                <div class="extra-item">
+                    <p class="extra-item-title">Semifinalist: BPC UISP 2025</p>
+                    <p class="extra-item-desc">Product: Bring.In</p>
+                </div>
+                <div class="extra-item">
+                    <p class="extra-item-title">3rd Winner: Mini Case Competition Pekan RISTEK 2025</p>
+                </div>
+                <div class="extra-item">
+                    <p class="extra-item-title">Semifinalist:  BPC EPIC 11th by OUFEST</p>
+                    <p class="extra-item-desc">Product: Bring.In</p>
+                </div>
+            </div>
+            </div>
+                </section>
+
+                <!-- Education Section -->
+                <section class="education" id="edu">
+            <div class="container">
+                <p class="section-kicker">Education</p>
+                <div class="education-box">
+                    <div class="education-list">
+                        <div class="education-item">
+                            <img src="/static/img/ui.png" alt="Universitas Indonesia logo" class="education-logo">
+                            <div class="education-body">
+                                <div class="education-title">
+                                    <h3>Universitas Indonesia</h3>
+                                    <span class="education-date">2025 - Present</span>
+                                </div>
+                                <p class="education-program">S1 Sistem Informasi, Fakultas Ilmu Komputer</p>
+                                <p class="education-desc">Focused on information systems, product management, and software development.</p>
+                            </div>
+                        </div>
+                        <div class="education-item">
+                            <img src="/static/img/smanti.png" alt="SMA Negeri 3 Depok Logo" class="education-logo">
+                            <div class="education-body">
+                                <div class="education-title">
+                                    <h3>SMA Negeri 3 Depok</h3>
+                                    <span class="education-date">2022 - 2025</span>
+                                </div>
+                                <p class="education-program">Jurusan Teknik</p>
+                                <p class="education-desc">Final Score: 95,67</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
-        <section class="education" id="edu">
-    <div class="container">
-        <p class="section-kicker">Education</p>
-        <div class="education-box">
-            <div class="education-list">
 
-                <div class="education-item">
-                    <img src="/static/img/ui.png" alt="Universitas Indonesia logo" class="education-logo">
-                    <div class="education-body">
-                        <div class="education-title">
-                            <h3>Universitas Indonesia</h3>
-                            <span class="education-date">2025 - Present</span>
-                        </div>
-                        <p class="education-program">S1 Sistem Informasi, Fakultas Ilmu Komputer</p>
-                        <p class="education-desc">Focused on information systems, product management, and software development.</p>
-                    </div>
-                </div>
+            <!-- Featured Highlights: untuk update terbaru yang saya kerjakan -->
+            <section class="highlights" id="highlights">
+            <div class="container">
+                <p class="section-kicker">Featured Highlights</p>
 
-                <div class="education-item">
-                    <img src="/static/img/smanti.png" alt="SMA Negeri 3 Depok Logo" class="education-logo">
-                    <div class="education-body">
-                        <div class="education-title">
-                            <h3>SMA Negeri 3 Depok</h3>
-                            <span class="education-date">2022 - 2025</span>
+                <div class="highlights-grid">
+                    <article class="highlight-card highlight-card--featured">
+                        <div class="highlight-media">
+                            <img src="/static/img/exchange-um.png" alt="University of Malaya Exchange Program">
                         </div>
-                        <p class="education-program">Jurusan Teknik</p>
-                        <p class="education-desc">Final Score: 95,67</p>
-                    </div>
+                        <div class="highlight-body">
+                            <span class="highlight-tag">Academic Exchange</span>
+                            <h3>5-Day Exchange Program University of Malaya</h3>
+                            <p class="highlight-desc">Completed short courses on "Build Your Personal Brand" and "RoboCup Soccer: AI, Strategy, and Autonomous Decision Making" at the University of Malaya. It also facilitates the exchange of ideas and cultures between countries.</p>
+                            <span class="highlight-date">2026</span>
+                        </div>
+                    </article>
+
+                    <article class="highlight-card">
+                        <div class="highlight-media">
+                            <img src="/static/img/bpc-uisp.jpg" alt="BPC UISP 2025">
+                        </div>
+                        <div class="highlight-body">
+                            <span class="highlight-tag">Business Case Competition</span>
+                            <h3>Semifinalist : BPC UISP 2025</h3>
+                            <p class="highlight-desc">Product: Bring.In</p>
+                            <span class="highlight-date">2025</span>
+                        </div>
+                    </article>
+
+                    <article class="highlight-card">
+                        <div class="highlight-media">
+                            <img src="/static/img/pekan-ristek.jpg" alt="Pekan RISTEK Mini Case Competition">
+                        </div>
+                        <div class="highlight-body">
+                            <span class="highlight-tag">Mini Case Competition</span>
+                            <h3>3rd Winner : Pekan RISTEK 2025</h3>
+                            <span class="highlight-date">2025</span>
+                        </div>
+                    </article>
+
+                    <article class="highlight-card">
+                        <div class="highlight-media">
+                            <img src="/static/img/bpc-epic.jpg" alt="BPC EPIC 11th by OUFEST">
+                        </div>
+                        <div class="highlight-body">
+                            <span class="highlight-tag">Business Case Competition</span>
+                            <h3>Semifinalist : BPC EPIC 11th by OUFEST</h3>
+                            <p class="highlight-desc">Product: Bring.In</p>
+                            <span class="highlight-date">2025</span>
+                        </div>
+                    </article>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-    <section class="highlights" id="highlights">
-    <div class="container">
-        <p class="section-kicker">Featured Highlights</p>
+        </section>
+        </main>
 
-        <div class="highlights-grid">
-            <article class="highlight-card highlight-card--featured">
-                <div class="highlight-media">
-                    <img src="/static/img/exchange-um.png" alt="University of Malaya Exchange Program">
+            <!-- Footer -->
+            <footer class="site-footer">
+                <div class="container">
+                    <p>&copy; 2026 Danar Iqbal Abi. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
                 </div>
-                <div class="highlight-body">
-                    <span class="highlight-tag">Academic Exchange</span>
-                    <h3>5-Day Exchange Program University of Malaya</h3>
-                    <p class="highlight-desc">Completed short courses on "Build Your Personal Brand" and "RoboCup Soccer: AI, Strategy, and Autonomous Decision Making" at the University of Malaya. It also facilitates the exchange of ideas and cultures between countries.</p>
-                    <span class="highlight-date">2026</span>
-                </div>
-            </article>
-
-            <article class="highlight-card">
-                <div class="highlight-media">
-                    <img src="/static/img/bpc-uisp.jpg" alt="BPC UISP 2025">
-                </div>
-                <div class="highlight-body">
-                    <span class="highlight-tag">Business Case Competition</span>
-                    <h3>Semifinalist : BPC UISP 2025</h3>
-                    <p class="highlight-desc">Product: Bring.In</p>
-                    <span class="highlight-date">2025</span>
-                </div>
-            </article>
-
-            <article class="highlight-card">
-                <div class="highlight-media">
-                    <img src="/static/img/pekan-ristek.jpg" alt="Pekan RISTEK Mini Case Competition">
-                </div>
-                <div class="highlight-body">
-                    <span class="highlight-tag">Mini Case Competition</span>
-                    <h3>3rd Winner : Pekan RISTEK 2025</h3>
-                    <span class="highlight-date">2025</span>
-                </div>
-            </article>
-
-            <article class="highlight-card">
-                <div class="highlight-media">
-                    <img src="/static/img/bpc-epic.jpg" alt="BPC EPIC 11th by OUFEST">
-                </div>
-                <div class="highlight-body">
-                    <span class="highlight-tag">Business Case Competition</span>
-                    <h3>Semifinalist : BPC EPIC 11th by OUFEST</h3>
-                    <p class="highlight-desc">Product: Bring.In</p>
-                    <span class="highlight-date">2025</span>
-                </div>
-            </article>
-        </div>
-    </div>
-</section>
-</main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 Danar Iqbal Abi. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
-        </div>
-    </footer>
-</body>
-</html>
+            </footer>
+        </body>
+        </html>
