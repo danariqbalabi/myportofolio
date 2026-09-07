@@ -339,6 +339,8 @@ nav ul {
     padding-left: 1.25rem;
     border-left: 2px solid var(--line);
     position: relative;
+    display: flex;
+    gap: 1rem;
 }
 
 .timeline-item::before {
@@ -443,6 +445,93 @@ nav ul {
     display: none;
 }
 
+.timeline-photo {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    border: 1px solid var(--line);
+}
+
+.timeline-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.stats-toggle {
+    display: none;
+}
+
+.stat-card--clickable {
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.stat-card--clickable:hover {
+    border-color: var(--accent);
+}
+
+.stat-hint {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+    opacity: 0.7;
+}
+
+.extra-panel {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 0;
+    transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.3s ease;
+}
+
+.extra-panel-title {
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+}
+
+.extra-item {
+    padding: 0.85rem 0;
+    border-top: 1px solid var(--line);
+}
+
+.extra-item-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.extra-item-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+}
+
+.extra-item-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+#toggle-experience:checked ~ .extra-panel--experience,
+#toggle-competition:checked ~ .extra-panel--competition {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 1.5rem;
+}
+
+#toggle-experience:checked ~ .experience-layout label[for="toggle-experience"],
+#toggle-competition:checked ~ .experience-layout label[for="toggle-competition"] {
+    border-color: var(--accent);
+    background-color: rgba(0, 255, 136, 0.06);
+}
+
 
 @media (max-width: 600px) {
     .experience-layout {
@@ -485,6 +574,13 @@ nav ul {
         gap: 0.75rem 1.25rem;
         font-size: 0.85rem;
     }
+    .timeline-item {
+        gap: 0.75rem;
+    }
+    .timeline-photo {
+        width: 36px;
+        height: 36px;
+    }
 }
 
 .experience-box {
@@ -492,4 +588,78 @@ nav ul {
     background-color: rgba(232, 245, 233, 0.05);
     border: 1px solid rgba(232, 245, 233, 0.14);
     border-radius: var(--radius);
+}
+
+.education {
+    padding: 4rem 0;
+    border-top: 1px solid var(--line);
+}
+
+.education-box {
+    padding: 2.5rem;
+    background-color: rgba(232, 245, 233, 0.05);
+    border: 1px solid rgba(232, 245, 233, 0.14);
+    border-radius: var(--radius);
+}
+
+.education-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.education-item {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.education-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.education-logo {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    border: 1px solid var(--line);
+}
+
+.education-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.education-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.education-title h3 {
+    font-size: 1rem;
+    color: var(--ink);
+}
+
+.education-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.education-program {
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin: 0.2rem 0 0.4rem;
+}
+
+.education-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }

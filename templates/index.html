@@ -42,7 +42,7 @@
                         Passionate about developments in the IT and business sectors.
                     </p>
                 <div class="hero-actions">
-                    <a href="#projects" class="button button-primary">My Projects > </a>
+                    <a href="#exp" class="button button-primary">My Projects > </a>
                     <a href="#contact" class="button button-secondary">Contact Me</a>
                 </div>
                     <div class="social-links">
@@ -111,9 +111,14 @@
                     <div class="container">
                         <p class="section-kicker">Experience</p>
                         <div class="experience-box">
+
+                        <input type="checkbox" id="toggle-experience" class="stats-toggle">
+                        <input type="checkbox" id="toggle-competition" class="stats-toggle">
                         <div class="experience-layout">
                             <div class="timeline">
                                 <div class="timeline-item">
+                                    <img src="/static/img/openhouse.png" alt="Open House Fasilko UI Logo" class="timeline-photo">
+                                    <div class="timeline-body">
                                     <div class="timeline-title">
                                     <p>VPIC Of Public Relations</p>
                                     <span class="timeline-date">Aug 2026 - Present</span> 
@@ -121,7 +126,10 @@
                                     <p class="timeline-org">Open House Fasilkom UI 2026</p>
                                 <p class="timeline-desc">Vice Person in Charge of Public Relations Division</p>
                                 </div>
+                                </div>
                                 <div class="timeline-item timeline-item--branched">
+                                    <img src="/static/img/ristek.png" alt="RISTEK Fasilkom UI logo" class="timeline-photo">
+                                     <div class="timeline-body">
                                 <div class="timeline-branch">
                                     <div class="timeline-title">
                                         <p>RISTEK Fasilkom UI</p>
@@ -145,7 +153,10 @@
                                         Marketing Manager of RISTEK Hackathon Fasilkom UI</p>                              
                             </div>
                             </div>
+                            </div>
                             <div class="timeline-item">
+                                <img src="/static/img/bu.png" alt="Kemendikbud logo" class="timeline-photo">
+                                <div class="timeline-body">
                                     <div class="timeline-title">
                                     <p>Awardee of Beasiswa Unggulan</p>
                                     <span class="timeline-date">Oct 2025 - Present</span>  
@@ -154,24 +165,81 @@
                                     <p class="timeline-desc">Awardee of Beasiswa Unggulan from Kemendikbud</p>
                                 </div>
                             </div>
+                            </div>
                         <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-number">10+</span>
-                            <span class="stat-label">Competitions</span>
+            <label for="toggle-experience" class="stat-card stat-card--clickable">
+                <span class="stat-number">5+</span>
+                <span class="stat-label">Experiences</span>
+                <span class="stat-hint">Klik buat update</span>
+            </label>
+            <label for="toggle-competition" class="stat-card stat-card--clickable">
+                <span class="stat-number">10+</span>
+                <span class="stat-label">Competitions</span>
+                <span class="stat-hint">Klik buat riwayat</span>
+            </label>
+            <div class="stat-card">
+                <span class="stat-number">1+</span>
+                <span class="stat-label">Years Learning</span>
+            </div>
+        </div>
+    </div>
+        <div class="extra-panel extra-panel--experience">
+        <h4 class="extra-panel-title">Latest Update</h4>
+        <div class="extra-item">
+            <p class="extra-item-title">Academic Exchange — University of Malaya</p>
+            <span class="extra-item-date">2026</span>
+            <p class="extra-item-desc">Completed a 5-day academic exchange program at University of Malaya.</p>
+        </div>
+    </div>
+        <div class="extra-panel extra-panel--competition">
+        <h4 class="extra-panel-title">Competition History</h4>
+        <div class="extra-item">
+            <p class="extra-item-title">Semifinalist — BPC UISP 2025</p>
+            <p class="extra-item-desc">Product: Bring.In</p>
+        </div>
+        <div class="extra-item">
+            <p class="extra-item-title">3rd Winner — Mini Case Competition Pekan RISTEK 2025</p>
+        </div>
+        <div class="extra-item">
+            <p class="extra-item-title">Semifinalist — BPC EPIC 11th by OUFEST</p>
+            <p class="extra-item-desc">Product: Bring.In</p>
+        </div>
+    </div>
+    </div>
+        </section>
+        <section class="education" id="edu">
+    <div class="container">
+        <p class="section-kicker">Education</p>
+        <div class="education-box">
+            <div class="education-list">
+
+                <div class="education-item">
+                    <img src="/static/img/ui.png" alt="Universitas Indonesia logo" class="education-logo">
+                    <div class="education-body">
+                        <div class="education-title">
+                            <h3>Universitas Indonesia</h3>
+                            <span class="education-date">2025 - Present</span>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-number">5+</span>
-                            <span class="stat-label">Experiences</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number">1+</span>
-                            <span class="stat-label">Years Learning</span>
-                            </div>
-                            </div>
-                        </div>
+                        <p class="education-program">S1 Sistem Informasi, Fakultas Ilmu Komputer</p>
+                        <p class="education-desc">Focused on information systems, product management, and software development.</p>
                     </div>
                 </div>
-                </section>
+
+                <div class="education-item">
+                    <img src="/static/img/smanti.png" alt="SMA Negeri 3 Depok Logo" class="education-logo">
+                    <div class="education-body">
+                        <div class="education-title">
+                            <h3>SMA Negeri 3 Depok</h3>
+                            <span class="education-date">2022 - 2025</span>
+                        </div>
+                        <p class="education-program">Jurusan Teknik</p>
+                        <p class="education-desc">Final Score: 95,67</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
             </main>
 
     <footer class="site-footer">
