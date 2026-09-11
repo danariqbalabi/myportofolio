@@ -16,8 +16,10 @@
         <div class="container header-inner">
             <a href="#home" class="brand">{{ name }}</a>
             <nav class="main-nav" aria-label="Main navigation">
-                <a href="#home" class="nav-link is-active">Home</a>
-                <a href="#exp" class="nav-link">Experience</a>
+                <a href="#home" class="nav-link nav-home" title="Home">
+                <img src="/static/img/home.svg" alt="Home">
+                </a>
+                <a href="{% url 'main:show_experience' %}" class="nav-link">Experience</a>              
                 <a href="#edu" class="nav-link">Education</a>
                 <a href="#highlights" class="nav-link">Highlights</a>
                 <a href="#contact" class="nav-link">Contact</a>
@@ -76,107 +78,102 @@
         </section>
 
         <!-- Experience Section: timeline dan panel informasi -->
-        <section class="experience" id="exp">
-            <div class="container">
-                <p class="section-kicker">Experience</p>
-                <div class="experience-box">
-                    <input type="checkbox" id="toggle-experience" class="stats-toggle">
-                    <input type="checkbox" id="toggle-competition" class="stats-toggle">
+            <section class="experience" id="exp">
+        <div class="container">
+            <p class="section-kicker">Experience</p>
 
-                    <div class="experience-layout">
-                        <div class="timeline">
-                            <div class="timeline-item">
-                                <img src="/static/img/openhouse.png" alt="Open House Fasilkom UI logo" class="timeline-photo">
-                                <div class="timeline-body">
-                                    <div class="timeline-title">
-                                        <p>VPIC Of Public Relations</p>
-                                        <span class="timeline-date">Aug 2026 - Present</span>
-                                    </div>
-                                    <p class="timeline-org">Open House Fasilkom UI 2026</p>
-                                    <p class="timeline-desc">Vice Person in Charge of Public Relations Division</p>
-                                </div>
-                            </div>
+            <div class="experience-stage">
+                <article class="experience-card is-active" data-index="0">
+                    <img
+                        src="/static/img/foto-oh.jpeg"
+                        alt="Open House Fasilkom UI"
+                        class="experience-card-image"
+                    >
 
-                            <div class="timeline-item timeline-item--branched">
-                                <img src="/static/img/ristek.png" alt="RISTEK Fasilkom UI logo" class="timeline-photo">
-                                <div class="timeline-body">
-                                    <div class="timeline-branch">
-                                        <div class="timeline-title">
-                                            <p>RISTEK Fasilkom UI</p>
-                                        </div>
-                                        <div class="timeline-branch-title">
-                                            <p class="timeline-org">Member of Product &amp; Project Management of RISTEK Fasilkom UI 2026</p>
-                                            <span class="timeline-date">Mar 2026 - Present</span>
-                                        </div>
-                                        <p class="timeline-desc">Member of Product &amp; Project Management RISTEK Fasilkom UI</p>
-                                    </div>
-                                    <div class="timeline-branch">
-                                        <div class="timeline-branch-title">
-                                            <p class="timeline-org">Marketing Manager of RISTEK Hackathon 2026</p>
-                                            <span class="timeline-date">Jul 2026 - Aug 2026</span>
-                                        </div>
-                                        <p class="timeline-desc">Marketing Manager of RISTEK Hackathon Fasilkom UI</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <img src="/static/img/bu.png" alt="Kemendikbud logo" class="timeline-photo">
-                                <div class="timeline-body">
-                                    <div class="timeline-title">
-                                        <p>Awardee of Beasiswa Unggulan</p>
-                                        <span class="timeline-date">Oct 2025 - Present</span>
-                                    </div>
-                                    <p class="timeline-org">Kementrian Pendidikan dan Kebudayaan</p>
-                                    <p class="timeline-desc">Awardee of Beasiswa Unggulan from Kemendikbud</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="stats-grid">
-                            <label for="toggle-experience" class="stat-card stat-card--clickable">
-                                <span class="stat-number">3+</span>
-                                <span class="stat-label">Experiences</span>
-                                <span class="stat-hint">Klik Untuk Detail</span>
-                            </label>
-                            <label for="toggle-competition" class="stat-card stat-card--clickable">
-                                <span class="stat-number">3+</span>
-                                <span class="stat-label">Competitions</span>
-                                <span class="stat-hint">Klik Untuk Detail</span>
-                            </label>
-                            <div class="stat-card">
-                                <span class="stat-number">1+</span>
-                                <span class="stat-label">Years Learning</span>
-                            </div>
-                        </div>
+                    <div class="experience-card-overlay">
+                        <p class="experience-category">Organization</p>
+                        <h3>VPIC of Public Relations</h3>
+                        <p class="experience-organization">
+                            Open House Fasilkom UI 2026
+                        </p>
+                        <p class="experience-meta">
+                            Aug 2026 - Present
+                        </p>
+                        <p class="experience-description">
+                            Vice Person in Charge of Public Relations Division.
+                        </p>
                     </div>
+                </article>
 
-                    <div class="extra-panel extra-panel--experience">
-                        <h4 class="extra-panel-title">Latest Update</h4>
-                        <div class="extra-item">
-                            <p class="extra-item-title">Academic Exchange: University of Malaya</p>
-                            <span class="extra-item-date">2026</span>
-                            <p class="extra-item-desc">Completed a 5-day academic exchange program at University of Malaya.</p>
-                        </div>
-                    </div>
+                <article class="experience-card" data-index="1">
+                    <img
+                        src="/static/img/foto-ristek.jpeg"
+                        alt="RISTEK Fasilkom UI"
+                        class="experience-card-image"
+                    >
 
-                    <div class="extra-panel extra-panel--competition">
-                        <h4 class="extra-panel-title">Competition History</h4>
-                        <div class="extra-item">
-                            <p class="extra-item-title">Semifinalist: BPC UISP 2025</p>
-                            <p class="extra-item-desc">Product: Bring.In</p>
-                        </div>
-                        <div class="extra-item">
-                            <p class="extra-item-title">3rd Winner: Mini Case Competition Pekan RISTEK 2025</p>
-                        </div>
-                        <div class="extra-item">
-                            <p class="extra-item-title">Semifinalist: BPC EPIC 11th by OUFEST</p>
-                            <p class="extra-item-desc">Product: Bring.In</p>
-                        </div>
+                    <div class="experience-card-overlay">
+                        <p class="experience-category">Organization</p>
+                        <h3>Member of Product &amp; Project Management</h3>
+                        <p class="experience-organization">
+                            RISTEK Fasilkom UI 2026
+                        </p>
+                        <p class="experience-meta">
+                            Mar 2026 - Present
+                        </p>
+                        <p class="experience-description">
+                            Member of Product and Project Management division.
+                        </p>
                     </div>
-                </div>
+                </article>
+
+                <article class="experience-card" data-index="2">
+                    <img
+                        src="/static/img/foto-bu.jpeg"
+                        alt="Beasiswa Unggulan"
+                        class="experience-card-image"
+                    >
+
+                    <div class="experience-card-overlay">
+                        <p class="experience-category">Scholarship</p>
+                        <h3>Awardee of Beasiswa Unggulan</h3>
+                        <p class="experience-organization">
+                            Kementerian Pendidikan dan Kebudayaan
+                        </p>
+                        <p class="experience-meta">
+                            Oct 2025 - Present
+                        </p>
+                        <p class="experience-description">
+                            Awardee of Beasiswa Unggulan.
+                        </p>
+                    </div>
+                </article>
+
+                <button
+                    type="button"
+                    class="experience-arrow experience-arrow--previous"
+                    aria-label="Previous experience"
+                >
+                    &#10094;
+                </button>
+
+                <button
+                    type="button"
+                    class="experience-arrow experience-arrow--next"
+                    aria-label="Next experience"
+                >
+                    &#10095;
+                </button>
             </div>
-        </section>
+
+            <a
+                href="{% url 'main:show_experience' %}"
+                class="button button-secondary experience-all-button"
+            >
+                View All Experience
+            </a>
+        </div>
+    </section>
 
                 <!-- Education Section -->
                 <section class="education" id="edu">
@@ -274,6 +271,7 @@
                 <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>                
             </div>
             </footer>
+            <script src="/static/js/experience.js"></script>
         </body>
         </html>
 

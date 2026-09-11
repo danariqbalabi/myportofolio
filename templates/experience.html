@@ -14,22 +14,27 @@
 
     <!-- HEADER: Untuk brand, nav, cv button -->
     <header class="site-header">
-        <div class="container">
-            <a href="#home" class="brand">{{ name }}</a>
-            <nav>
-                <ul>
-                    <li><a href="{% url 'main:show_main' %}">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="{% url 'main:show_experience' %}">Experience</a></li>
-                    <li><a href="#edu">Educations</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">
-            Download CV <!-- untuk download cv -->
+    <div class="container header-inner">
+        <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="{% url 'main:show_main' %}" class="nav-link">Home</a>
+            <a href="{% url 'main:show_experience' %}"
+               class="nav-link is-active">
+                Experience
             </a>
-            </nav>
-        </div>
-    </header>
+            <a href="{% url 'main:show_main' %}#edu" class="nav-link">Education</a>
+            <a href="{% url 'main:show_main' %}#highlights" class="nav-link">Highlights</a>
+            <a href="{% url 'main:show_main' %}#contact" class="nav-link">Contact</a>
+        </nav>
+
+        <a href="/static/files/CV_Danar_Iqbal.pdf"
+           download
+           class="button button-secondary">
+            Download CV
+        </a>
+    </div>
+</header>
 
         <main>
     <section class="experience-section" id="experience">
