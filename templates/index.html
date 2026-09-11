@@ -11,222 +11,172 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-
-    <!-- HEADER: Untuk brand, nav, cv button -->
+    <!-- Header -->
     <header class="site-header">
-        <div class="container">
+        <div class="container header-inner">
             <a href="#home" class="brand">{{ name }}</a>
-            <nav>
-                <ul>
-                    <li><a href="{% url 'main:show_main' %}">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="{% url 'main:show_experience' %}">Experience</a></li>
-                    <li><a href="#edu">Educations</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">
-            Download CV <!-- untuk download cv -->
-            </a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="#home" class="nav-link is-active">Home</a>
+                <a href="#exp" class="nav-link">Experience</a>
+                <a href="#edu" class="nav-link">Education</a>
+                <a href="#highlights" class="nav-link">Highlights</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </nav>
+            <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">Download CV</a>
         </div>
     </header>
 
     <main>
-        <!-- Hero Section: Intro + photo  -->
+        <!-- Home profile -->
         <section class="hero" id="home">
             <div class="container hero-grid">
-                <!-- left column, top: greeting + name -->
-                <div class="hero-identity">
-                    <p class="hero-kicker">Hi, I'm</p>
-                    <h1>{{ name }}</h1>
-                </div>
-
-                <!-- Left column, bottom: tagline, description, CTAs, socials -->
                 <div class="hero-content">
-                    <p class="hero-tagline">Information Systems Student at the University of Indonesia</p>
+                    <p class="hero-kicker">Hello, I am</p>
+                    <h1>{{ name }}</h1>
+                    <p class="hero-tagline">Information Systems Student &amp; Digital Enthusiast</p>
                     <p class="hero-description">{{ bio }}</p>
-                    <!-- CTA buttons: "My Update" scrolls ke #highlights, "Contact Me" ke #contact -->
-                <div class="hero-actions">
-                    <a href="#highlights" class="button button-primary">My Update > </a>
-                    <a href="#contact" class="button button-secondary">Contact Me</a>
-                </div>
 
-                <!-- Social links row -->
-                <div class="social-links">
-                    <p> Let's Connect!</p>
-                    <a href="https://github.com/danariqbalabi" class="social-link" aria-label="Github">
-                        <img src="/static/img/github.svg" alt="">
-                    </a>
-                    <a href="https://www.linkedin.com/in/danar-iqbal-abi-zaidan-suharso?_l=en_US" class="social-link" aria-label="LinkedIn">
-                        <img src="/static/img/linkedin.svg" alt="">
-                    </a>
-                    <a href="mailto:danariqbalabi0210@gmail.com" class="social-link" aria-label="Email">
-                        <img src="/static/img/email.svg" alt="">
-                    </a>
+                    <dl class="hero-meta">
+                        <div class="hero-meta-item">
+                            <dt>NPM</dt>
+                            <dd>{{ npm }}</dd>
+                        </div>
+                        <div class="hero-meta-item">
+                            <dt>Program</dt>
+                            <dd>{{ study_program }}</dd>
+                        </div>
+                    </dl>
+
+                    <div class="hero-actions">
+                        <a href="#exp" class="button button-primary">View Experience &rarr;</a>
+                        <a href="#contact" class="button button-secondary">Contact Me</a>
+                    </div>
+
+                    <div class="social-links">
+                        <span>Let's Connect!</span>
+                        <a href="https://github.com/danariqbalabi" class="social-link" aria-label="Github">
+                            <img src="/static/img/github.svg" alt="">
+                        </a>
+                        <a href="https://www.linkedin.com/in/danar-iqbal-abi-zaidan-suharso?_l=en_US" class="social-link" aria-label="LinkedIn">
+                            <img src="/static/img/linkedin.svg" alt="">
+                        </a>
+                        <a href="mailto:danariqbalabi0210@gmail.com" class="social-link" aria-label="Email">
+                            <img src="/static/img/email.svg" alt="">
+                        </a>
                     </div>
                 </div>
 
-                <!-- right column: profile photo dengan glow-->
                 <div class="hero-photo">
+                    <div class="photo-orbit photo-orbit--one"></div>
+                    <div class="photo-orbit photo-orbit--two"></div>
                     <div class="photo-block"></div>
                     <img class="avatar" src="/static/img/danar.png" alt="Photo of {{ name }}">
                 </div>
             </div>
         </section>
 
-        <!-- Section About-->
-        <section class="about" id="about">
-            <div class="container">
-            <p class="section-kicker">About Me</p>
-                <div class="about-box">
-                    <div class="about-layout">
-
-                        <!-- Left col: bio text -->
-                        <div class="about-intro">
-                            <p class="about-text">
-                            An Information Systems student with a keen interest in the dynamic evolution of the business and technology sectors.
-                            </p>
-                        </div>
-
-                        <!-- Right: NPM / jurusan key value info -->
-                        <dl class="meta-list">
-                            <div class="meta-row">
-                                <dt>NPM</dt>
-                                <dd>{{ name }}</dd>
-                            </div>
-                            <div class="meta-row">
-                                <dt>Program</dt>
-                                <dd>{{ study_program }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-
-                    <!-- fact cards: Location, Interest, Hobby -->
-                    <div class="about-cards">
-                        <article class="about-card">
-                            <h3>Location</h3>
-                            <p>Depok, West Java</p>
-                        </article>
-                        <article class="about-card">
-                            <h3>Interest</h3>
-                            <p>Collaborations in technology and business</p>
-                        </article>
-                        <article class="about-card">
-                            <h3>Hobby</h3>
-                            <p>Solve your problem.</p>
-                        </article>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXPERIENCE Section: timeline experience + clickable statts cards-->
+        <!-- Experience Section: timeline dan panel informasi -->
         <section class="experience" id="exp">
             <div class="container">
-            <p class="section-kicker">Experience</p>
+                <p class="section-kicker">Experience</p>
                 <div class="experience-box">
+                    <input type="checkbox" id="toggle-experience" class="stats-toggle">
+                    <input type="checkbox" id="toggle-competition" class="stats-toggle">
 
-                <!-- hidden checkboxes: klik untuk buka extra panel tanpa JavaScript, pakai checked-->
-                <input type="checkbox" id="toggle-experience" class="stats-toggle">
-                <input type="checkbox" id="toggle-competition" class="stats-toggle">
                     <div class="experience-layout">
-
-                        <!-- Timeline: organizational / leadership history -->
                         <div class="timeline">
                             <div class="timeline-item">
-                            <img src="/static/img/openhouse.png" alt="Open House Fasilko UI Logo" class="timeline-photo">
+                                <img src="/static/img/openhouse.png" alt="Open House Fasilkom UI logo" class="timeline-photo">
                                 <div class="timeline-body">
                                     <div class="timeline-title">
-                                    <p>VPIC Of Public Relations</p>
-                                    <span class="timeline-date">Aug 2026 - Present</span> 
-                                    </div>                               
-                                <p class="timeline-org">Open House Fasilkom UI 2026</p>
-                                <p class="timeline-desc">Vice Person in Charge of Public Relations Division</p>
+                                        <p>VPIC Of Public Relations</p>
+                                        <span class="timeline-date">Aug 2026 - Present</span>
+                                    </div>
+                                    <p class="timeline-org">Open House Fasilkom UI 2026</p>
+                                    <p class="timeline-desc">Vice Person in Charge of Public Relations Division</p>
                                 </div>
                             </div>
 
-                            <!-- "branched" item: khusus RISTEK karena ada 2 timeline dlm 1 organisasi-->
                             <div class="timeline-item timeline-item--branched">
-                            <img src="/static/img/ristek.png" alt="RISTEK Fasilkom UI logo" class="timeline-photo">
+                                <img src="/static/img/ristek.png" alt="RISTEK Fasilkom UI logo" class="timeline-photo">
                                 <div class="timeline-body">
                                     <div class="timeline-branch">
                                         <div class="timeline-title">
                                             <p>RISTEK Fasilkom UI</p>
                                         </div>
-                                    <div class="timeline-branch-title">
-                                    <p class="timeline-org">Member of Product & Project Management of RISTEK Fasilkom UI 2026</p>
-                                    <span class="timeline-date">Mar 2026 - Present</span>
+                                        <div class="timeline-branch-title">
+                                            <p class="timeline-org">Member of Product &amp; Project Management of RISTEK Fasilkom UI 2026</p>
+                                            <span class="timeline-date">Mar 2026 - Present</span>
+                                        </div>
+                                        <p class="timeline-desc">Member of Product &amp; Project Management RISTEK Fasilkom UI</p>
                                     </div>
-                                    <p class="timeline-desc">Member of Product & Project Management RISTEK Fasilkom UI</p>                                
+                                    <div class="timeline-branch">
+                                        <div class="timeline-branch-title">
+                                            <p class="timeline-org">Marketing Manager of RISTEK Hackathon 2026</p>
+                                            <span class="timeline-date">Jul 2026 - Aug 2026</span>
+                                        </div>
+                                        <p class="timeline-desc">Marketing Manager of RISTEK Hackathon Fasilkom UI</p>
+                                    </div>
                                 </div>
-                            <div class="timeline-branch">
-                            <div class="timeline-branch-title">
-                                <p class="timeline-org">Marketing Manager of RISTEK Hackathon 2026</p>
-                                <span class="timeline-date">Jul 2026 - Aug 2026</span>
+                            </div>
+
+                            <div class="timeline-item">
+                                <img src="/static/img/bu.png" alt="Kemendikbud logo" class="timeline-photo">
+                                <div class="timeline-body">
+                                    <div class="timeline-title">
+                                        <p>Awardee of Beasiswa Unggulan</p>
+                                        <span class="timeline-date">Oct 2025 - Present</span>
+                                    </div>
+                                    <p class="timeline-org">Kementrian Pendidikan dan Kebudayaan</p>
+                                    <p class="timeline-desc">Awardee of Beasiswa Unggulan from Kemendikbud</p>
                                 </div>
-                                <p class="timeline-desc">Marketing Manager of RISTEK Hackathon Fasilkom UI</p>                              
                             </div>
                         </div>
-                    </div>
-                    <div class="timeline-item">
-                        <img src="/static/img/bu.png" alt="Kemendikbud logo" class="timeline-photo">
-                        <div class="timeline-body">
-                            <div class="timeline-title">
-                            <p>Awardee of Beasiswa Unggulan</p>
-                            <span class="timeline-date">Oct 2025 - Present</span>  
-                            </div>                                  
-                            <p class="timeline-org">Kementrian Pendidikan dan Kebudayaan</p>
-                            <p class="timeline-desc">Awardee of Beasiswa Unggulan from Kemendikbud</p>
+
+                        <div class="stats-grid">
+                            <label for="toggle-experience" class="stat-card stat-card--clickable">
+                                <span class="stat-number">3+</span>
+                                <span class="stat-label">Experiences</span>
+                                <span class="stat-hint">Klik Untuk Detail</span>
+                            </label>
+                            <label for="toggle-competition" class="stat-card stat-card--clickable">
+                                <span class="stat-number">3+</span>
+                                <span class="stat-label">Competitions</span>
+                                <span class="stat-hint">Klik Untuk Detail</span>
+                            </label>
+                            <div class="stat-card">
+                                <span class="stat-number">1+</span>
+                                <span class="stat-label">Years Learning</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Stat cards: clickable link -->
-                    <div class="stats-grid">
-                    <label for="toggle-experience" class="stat-card stat-card--clickable">
-                        <span class="stat-number">3+</span>
-                        <span class="stat-label">Experiences</span>
-                        <span class="stat-hint">Klik Untuk Detail</span>
-                    </label>
-                    <label for="toggle-competition" class="stat-card stat-card--clickable">
-                        <span class="stat-number">3+</span>
-                        <span class="stat-label">Competitions</span>
-                        <span class="stat-hint">Klik Untuk Detail</span>
-                    </label>
-                    <div class="stat-card">
-                        <span class="stat-number">1+</span>
-                        <span class="stat-label">Years Learning</span>
+                    <div class="extra-panel extra-panel--experience">
+                        <h4 class="extra-panel-title">Latest Update</h4>
+                        <div class="extra-item">
+                            <p class="extra-item-title">Academic Exchange: University of Malaya</p>
+                            <span class="extra-item-date">2026</span>
+                            <p class="extra-item-desc">Completed a 5-day academic exchange program at University of Malaya.</p>
+                        </div>
+                    </div>
+
+                    <div class="extra-panel extra-panel--competition">
+                        <h4 class="extra-panel-title">Competition History</h4>
+                        <div class="extra-item">
+                            <p class="extra-item-title">Semifinalist: BPC UISP 2025</p>
+                            <p class="extra-item-desc">Product: Bring.In</p>
+                        </div>
+                        <div class="extra-item">
+                            <p class="extra-item-title">3rd Winner: Mini Case Competition Pekan RISTEK 2025</p>
+                        </div>
+                        <div class="extra-item">
+                            <p class="extra-item-title">Semifinalist: BPC EPIC 11th by OUFEST</p>
+                            <p class="extra-item-desc">Product: Bring.In</p>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Extra panel: muncul hanya jika #toggle-experience di klik (checked) -->
-                <div class="extra-panel extra-panel--experience">
-                <h4 class="extra-panel-title">Latest Update</h4>
-                <div class="extra-item">
-                    <p class="extra-item-title">Academic Exchange: University of Malaya</p>
-                    <span class="extra-item-date">2026</span>
-                    <p class="extra-item-desc">Completed a 5-day academic exchange program at University of Malaya.</p>
-                </div>
-            </div>
-            <!-- Extra panel: muncul hanya jika #toggle-competition di klik (checked) -->
-                <div class="extra-panel extra-panel--competition">
-                <h4 class="extra-panel-title">Competition History</h4>
-                <div class="extra-item">
-                    <p class="extra-item-title">Semifinalist: BPC UISP 2025</p>
-                    <p class="extra-item-desc">Product: Bring.In</p>
-                </div>
-                <div class="extra-item">
-                    <p class="extra-item-title">3rd Winner: Mini Case Competition Pekan RISTEK 2025</p>
-                </div>
-                <div class="extra-item">
-                    <p class="extra-item-title">Semifinalist:  BPC EPIC 11th by OUFEST</p>
-                    <p class="extra-item-desc">Product: Bring.In</p>
-                </div>
-            </div>
-            </div>
-                </section>
+        </section>
 
                 <!-- Education Section -->
                 <section class="education" id="edu">
@@ -326,3 +276,4 @@
             </footer>
         </body>
         </html>
+

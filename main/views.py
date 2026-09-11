@@ -1,8 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
-from django.shortcuts import render
-
 from main.models import Experience
 
 
@@ -11,9 +8,8 @@ def show_main(request):
         "name": "Danar Iqbal Abi Zaidan Suharso",
         "npm": "2506534371",
         "study_program": "S1 Sistem Informasi",
-        "bio": (
-            "Passionate about developments in the IT and business sectors. "
-        ),
+        "bio":"Passionate about developments in the IT and business sectors. ",
+        "experience_list": Experience.objects.all(),
     }
     return render(request, "index.html", context)
 

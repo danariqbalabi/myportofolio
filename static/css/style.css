@@ -260,12 +260,6 @@ h1, .brand {
     border-top: 1px solid var(--line);
 }
 
-.about-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-}
-
 .about-text {
     color: var(--text-muted);
     margin-bottom: 0.85rem;
@@ -758,14 +752,6 @@ nav ul {
     border-top: 1px solid var(--line);
 }
 
-.section-kicker {
-    color: var(--accent-dark);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
 .experience-section h1 {
     margin: 0.4rem 0 1.5rem;
     font-size: 2rem;
@@ -805,4 +791,71 @@ nav ul {
     margin-top: 1rem;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+/* Home profile layout */
+.header-inner { width: 100%; }
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(10, 14, 13, 0.7);
+}
+
+.main-nav .nav-link {
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
+.main-nav .nav-link:hover,
+.main-nav .nav-link.is-active {
+    background: rgba(0, 255, 136, 0.14);
+    color: var(--accent);
+}
+
+.hero-meta {
+    display: flex;
+    gap: 2rem;
+    margin: 1.5rem 0;
+}
+
+.hero-meta-item dt {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hero-meta-item dd { font-weight: 600; }
+
+.photo-orbit {
+    position: absolute;
+    inset: -8%;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    opacity: 0.65;
+    transform: rotate(-22deg);
+    box-shadow: 0 0 24px rgba(0, 255, 136, 0.4);
+}
+
+.photo-orbit--two {
+    inset: 8% -12% -8% 8%;
+    transform: rotate(28deg);
+    opacity: 0.35;
+}
+
+@media (max-width: 700px) {
+    .main-nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        overflow-x: auto;
+    }
+
+    .hero-meta { gap: 1rem; flex-wrap: wrap; }
 }
