@@ -25,7 +25,7 @@ Semua menggunakan html dan css tanpa javascripts
 - CSS3 (Grid, Flexbox, custom properties, no framework)
 - Django (`manage.py runserver`) untuk templates and static files
 
-## Setup
+## Setup Minggu 1
 
 1. Clone repository
    ```bash
@@ -81,3 +81,71 @@ Strategi prompting yang saya pakai biasanya saya selalu menulis kode manual, lal
 Berikut link log prompting AI Codex:
 https://chatgpt.com/s/cx_6a9ab968b70081919d0fd2929858b34c
 https://chatgpt.com/s/cx_6a9e783cc14081919fccda9a703426ac
+
+
+
+### About the Project MINGGU 2
+
+Website portofolio pribadi yang sekarang sudah dibangun menggunakan Django, HTML, CSS, JavaScript, dan database SQLite.
+
+- Home: profil singkat, foto, NPM, program studi, tombol CTA, dan social links.
+- Experience: daftar pengalaman yang diambil dari model `Experience`.
+- Highlights: daftar pencapaian dan kegiatan dari model `Highlight`.
+-*Gallery: kumpulan foto-foto koleksi dan aktivitas dari model `GalleryItem`.
+
+Data pada halaman Experience, Highlights, dan Gallery disimpan di database dan ditampilkan melalui Django view serta template.
+
+
+### Setup Minggu 2
+1. Aktifkan virtual environment:
+   ```bash
+   env\Scripts\activate
+2. Jalankan migrasi database: python manage.py migrate
+3. Jalankan server: python manage.py runserver
+4. Buka web di local http://127.0.0.1:8000
+5. Jalankan test:
+python manage.py check
+python manage.py test
+
+Page URL baru
+/experience/
+/highlights/
+/gallery/
+
+### Tugas 2
+1. Alur ketika membuka halaman portofolio baru:
+- Ketika user membuka halaman portofolio saya yang terbaru, browser mengirimkan HTTP request ke alamat URL, misalnya `/gallery/` atau `/highlight/`
+- Request tersebut akan langsung diterima oleh `portofolio/urls.py` sebagai URL configuration utama project porto ini. Pada file tersebut, pola URL kosong diarahkan ke `main.urls` menggunakan `include("main.urls")` yg tersedia.
+- Lalu, Django mencari pola URL yang sesuai di `main/urls.py`. Contohnya utk alamat `/gallery/`, Django menemukan named route `show_gallery` yang mengarah ke function view `show_gallery` di `main/views.py`.
+- View kemudian mengambil data dari model `GalleryItem` menggunakan query: ```python GalleryItem.objects.all().order_by("-featured", "-year")
+- Data tersebut akan masuk ke context dengan nama (contohnya) gallery_items, lalu dikirim ke template gallery.html menggunakan fungsi render().
+- Di dalam gallery.html, Django Template Language melakukan perulangan terhadap gallery_items. Setiap objek ditampilkan sebagai kartu gallery yang berisi judul, caption, lokasi, tahun, dan gambar. Jika tidak ada data, bagian {% empty %} menampilkan pesan bahwa belum ada foto di gallery.
+- Setelah template selesai diproses, Django mengirimkan HTML sebagai HTTP response kepada browser. Browser kemudian merender HTML tersebut dan memuat file CSS serta gambar dari folder static sehingga halaman dapat ditampilkan secara utuh.
+- Pola ini repetitif dan akan sama pada page lain seperti experience dan highlights yang saya tambahkan
+
+2. Alasan menggunakan model:
+Data portofolio sebaiknya disimpan di dalam model dan tidak ditulis secara hardcode lgsg di dalam template karena model berfungsi sebagai representasi data di db. Dengan cara ini, isi portofolio dapat diubah, ditambah, atau dihapus tanpa harus mengubah kode HTML satu-persatu yang berpotensi menimbulkan risiko eror.
+
+Jika input ditulis langsung di template, setiap perubahan informasi mengharuskan developer membuka dan mengedit file HTML. Cara tersebut kurang efisien dan lebih mudah menyebabkan kesalahan, terutama ketika jumlah data semakin banyak.
+
+Dengan menggunakan model, data dapat dikelola melalui Django Admin atau sistem lain (seperti python migration) yang terhubung dengan database. Template hanya bertugas menampilkan data menggunakan perulangan, sehingga kode menjadi lebih bersih dan terpisah antara data, logika aplikasi, dan tampilan.
+
+3. Perbedaan makemigrations dan migrate
+Command makemigrations digunakan untuk membuat berkas migrasi berdasarkan perubahan pada model. Berkas tersebut berisi instruksi perubahan struktur db yang perlu dilakukan oleh Django.
+
+Perintah migrate digunakan untuk menerapkan berkas migrasi tersebut ke db. Dengan menjalankan migrate tsb, tabel atau kolom baru benar-benar dibuat atau diubah di dalam database yang ada.
+
+Contoh ketika saya menambahkan model GalleryItem dengan field title, caption, location, year, dan image, saya harus run:
+makemigrations membuat berkas migrasi baru, sedangkan migrate menerapkan perubahan tersebut ke database sehingga data GalleryItem dapat disimpan dan digunakan oleh view.
+
+### Tentang AI
+Saya menggunakan bantuan CODEX AI  untuk membantu solve problem yang sedikit sulit terjangkau secara manual seperti:
+- Mencari bug dari kode baru
+- Mencari informasi apakah suatu ide possible untuk diterapkan
+- Membantu dalam javascript
+
+Saya banyak menyusun kode ini secara mandiri tanpa AI pada bagian:
+- Brainstorming dan ide project
+- Coding manual, jika terdesak atau tidak works saya minta crosscheck ke AI
+
+https://chatgpt.com/s/cx_6aa7b6345100819186c6964a7cc1c47d

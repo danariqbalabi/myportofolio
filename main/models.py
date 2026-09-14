@@ -31,7 +31,7 @@ class Highlight(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=100)
     year = models.PositiveIntegerField()
-    thumbnail = models.URLField(blank=True, null=True)
+    thumbnail = models.CharField(blank=True, null=True)
 
     def __str__(self):
         return self.title

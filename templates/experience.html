@@ -18,12 +18,15 @@
         <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
 
         <nav class="main-nav" aria-label="Main navigation">
-            <a href="{% url 'main:show_main' %}" class="nav-link">Home</a>
+            <a href="{% url 'main:show_main' %}#home" class="nav-link nav-home" title="Home">
+                <img src="/static/img/home.svg" alt="Home">
+            </a>
             <a href="{% url 'main:show_experience' %}"
                class="nav-link is-active">
                 Experience
             </a>
-            <a href="{% url 'main:show_main' %}#highlights" class="nav-link">Highlights</a>
+            <a href="{% url 'main:show_highlights' %}" class="nav-link">Highlights</a>
+            <a href="{% url 'main:show_gallery' %}" class="nav-link">Gallery</a>
             <a href="{% url 'main:show_main' %}#contact" class="nav-link">Contact</a>
         </nav>
 
@@ -44,6 +47,13 @@
             <div class="experience-grid">
                 {% for experience in experience_list %}
                     <article class="experience-card">
+                        {% if experience.thumbnail %}
+                            <img
+                                src="{{ experience.thumbnail }}"
+                                alt="{{ experience.title }}"
+                                class="experience-page-image"
+                            >
+                        {% endif %}
                         <span class="experience-category">
                             {{ experience.get_category_display }}
                         </span>

@@ -11,10 +11,13 @@
         <div class="container header-inner">
             <a href="{% url 'main:show_main' %}#home" class="brand">{{ name }}</a>
             <nav class="main-nav" aria-label="Main navigation">
-                <a href="{% url 'main:show_main' %}#home" class="nav-link">Home</a>
+                <a href="{% url 'main:show_main' %}#home" class="nav-link nav-home" title="Home">
+                    <img src="/static/img/home.svg" alt="Home">
+                </a>
                 <a href="{% url 'main:show_experience' %}" class="nav-link">Experience</a>
                 <a href="{% url 'main:show_highlights' %}" class="nav-link">Highlights</a>
                 <a href="{% url 'main:show_gallery' %}" class="nav-link is-active">Gallery</a>
+                <a href="{% url 'main:show_main' %}#contact" class="nav-link">Contact</a>
             </nav>
             <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">Download CV</a>
         </div>
