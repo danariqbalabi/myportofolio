@@ -35,3 +35,16 @@ class Highlight(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class GalleryItem(models.Model):
+    title = models.CharField(max_length=255)
+    caption = models.TextField(blank=True)
+    category = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=255, blank=True)
+    year = models.PositiveIntegerField()
+    image = models.CharField(max_length=500)
+    featured = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title

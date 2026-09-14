@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from main.models import Experience, Highlight
+from main.models import Experience, GalleryItem, Highlight
 
 
 def show_main(request):
@@ -28,3 +28,11 @@ def show_highlights(request):
         "highlights": Highlight.objects.all().order_by("-year", "title"),
     }
     return render(request, "highlights.html", context)
+
+
+def show_gallery(request):
+    context = {
+        "name": "Danar Iqbal Abi Zaidan Suharso",
+        "gallery_items": GalleryItem.objects.all().order_by("-featured", "-year"),
+    }
+    return render(request, "gallery.html", context)

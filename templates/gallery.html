@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} - Gallery</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="{% url 'main:show_main' %}#home" class="brand">{{ name }}</a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="{% url 'main:show_main' %}#home" class="nav-link">Home</a>
+                <a href="{% url 'main:show_experience' %}" class="nav-link">Experience</a>
+                <a href="{% url 'main:show_highlights' %}" class="nav-link">Highlights</a>
+                <a href="{% url 'main:show_gallery' %}" class="nav-link is-active">Gallery</a>
+            </nav>
+            <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">Download CV</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="gallery-page">
+            <div class="container">
+                <div class="gallery-heading">
+                    <div>
+                        <p class="section-kicker">Life &amp; Snapshots</p>
+                        <h1>Moments beyond the classroom.</h1>
+                        <p>Trail logs, campus events, and views in between.</p>
+                    </div>
+                    <span class="gallery-hint">&larr; Slide to explore &rarr;</span>
+                </div>
+
+                <div class="gallery-track">
+                    {% for item in gallery_items %}
+                        <article class="gallery-card">
+                            <div class="gallery-image-wrap">
+                                <img src="{{ item.image }}" alt="{{ item.title }}">
+                            </div>
+                            <div class="gallery-card-body">
+                                {% if item.category %}
+                                    <span class="gallery-category">{{ item.category }}</span>
+                                {% endif %}
+                                <h2>{{ item.title }}</h2>
+                                <p class="gallery-meta">
+                                    {% if item.location %}{{ item.location }}{% endif %}
+                                    {% if item.location and item.year %} · {% endif %}
+                                    {{ item.year }}
+                                </p>
+                                {% if item.caption %}
+                                    <p class="gallery-caption">{{ item.caption }}</p>
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% empty %}
+                        <p class="empty-state">Belum ada foto di gallery.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+        </div>
+    </footer>
+</body>
+</html>
