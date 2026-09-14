@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} - Highlights</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="{% url 'main:show_main' %}#home" class="brand">{{ name }}</a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a href="{% url 'main:show_main' %}#home" class="nav-link">Home</a>
+                <a href="{% url 'main:show_experience' %}" class="nav-link">Experience</a>
+                <a href="{% url 'main:show_main' %}#edu" class="nav-link">Education</a>
+                <a href="{% url 'main:show_highlights' %}" class="nav-link is-active">Highlights</a>
+            </nav>
+            <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">Download CV</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="highlights highlights-page">
+            <div class="container">
+                <p class="section-kicker">Highlights</p>
+                <h1 class="highlights-page-title">Things I have worked on and experienced.</h1>
+
+                <div class="highlights-grid">
+                    {% for highlight in highlights %}
+                        <article class="highlight-card">
+                            <div class="highlight-media">
+                                {% if highlight.thumbnail %}
+                                    <img src="{{ highlight.thumbnail }}" alt="{{ highlight.title }}">
+                                {% endif %}
+                            </div>
+                            <div class="highlight-body">
+                                <span class="highlight-tag">{{ highlight.category }}</span>
+                                <h3>{{ highlight.title }}</h3>
+                                <p class="highlight-desc">{{ highlight.description }}</p>
+                                <span class="highlight-date">{{ highlight.year }}</span>
+                            </div>
+                        </article>
+                    {% empty %}
+                        <p class="empty-state">Belum ada highlight yang ditambahkan.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -547,30 +547,38 @@ nav ul {
 }
 
 .education-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
 }
 
 .education-item {
     display: flex;
-    gap: 1rem;
-    padding-bottom: 1.75rem;
-    border-bottom: 1px solid var(--line);
+    flex-direction: column;
+    gap: 1.25rem;
+    min-height: 250px;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(10, 14, 13, 0.45);
+    transition: border-color 0.25s ease, transform 0.25s ease,
+        background-color 0.25s ease;
 }
 
-.education-item:last-child {
-    padding-bottom: 0;
-    border-bottom: none;
+.education-item:hover {
+    border-color: var(--accent);
+    background: rgba(0, 255, 136, 0.06);
+    transform: translateY(-4px);
 }
 
 .education-logo {
     flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
     object-fit: cover;
     border: 1px solid var(--line);
+    background: var(--ink);
 }
 
 .education-body {
@@ -587,13 +595,17 @@ nav ul {
 }
 
 .education-title h3 {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--ink);
 }
 
 .education-date {
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    width: fit-content;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--accent);
+    font-size: 0.75rem;
     white-space: nowrap;
 }
 
@@ -720,6 +732,9 @@ nav ul {
         grid-template-columns: 1fr;
     }
     .about-cards {
+        grid-template-columns: 1fr;
+    }
+    .education-list {
         grid-template-columns: 1fr;
     }
     .site-header .container {
@@ -1079,6 +1094,81 @@ nav ul {
         margin-top 0.35s ease,
         opacity 0.35s ease,
         transform 0.35s ease;
+}
+
+/* Compact Featured Highlights preview on the home page. */
+#highlights .highlight-card--featured {
+    grid-column: auto;
+    display: block;
+}
+
+#highlights .highlight-card {
+    position: relative;
+    min-height: 280px;
+}
+
+#highlights .highlight-media {
+    height: 170px;
+    aspect-ratio: auto;
+}
+
+#highlights .highlight-body {
+    padding: 1rem;
+}
+
+#highlights .highlight-body h3 {
+    font-size: 1rem;
+}
+
+#highlights .highlight-desc {
+    max-height: 0;
+    margin: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: max-height 0.3s ease, margin 0.3s ease,
+        opacity 0.3s ease, transform 0.3s ease;
+}
+
+#highlights .highlight-card:hover .highlight-desc,
+#highlights .highlight-card:focus-within .highlight-desc {
+    max-height: 120px;
+    margin-bottom: 0.75rem;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.highlights-see-more {
+    display: flex;
+    width: fit-content;
+    margin: 1.5rem auto 0;
+}
+
+@media (hover: none) {
+    #highlights .highlight-desc {
+        max-height: 120px;
+        margin-bottom: 0.75rem;
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#highlights .highlight-media {
+    height: auto;
+    max-height: 170px;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+#highlights .highlight-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+#highlights .highlight-card:hover .highlight-media {
+    max-height: 600px;
 }
 
 #exp .experience-card:hover .experience-description,

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from main.models import Experience
+from main.models import Experience, Highlight
 
 
 def show_main(request):
@@ -20,3 +20,11 @@ def show_experience(request):
         "experience_list": Experience.objects.all(),
     }
     return render(request, "experience.html", context)
+
+
+def show_highlights(request):
+    context = {
+        "name": "Danar Iqbal Abi Zaidan Suharso",
+        "highlights": Highlight.objects.all().order_by("-year", "title"),
+    }
+    return render(request, "highlights.html", context)
