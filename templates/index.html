@@ -1,32 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }} - Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">    
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <!-- Header -->
-    <header class="site-header">
-        <div class="container header-inner">
-            <a href="#home" class="brand">{{ name }}</a>
-            <nav class="main-nav" aria-label="Main navigation">
-                <a href="#home" class="nav-link nav-home" title="Home">
-                <img src="/static/img/home.svg" alt="Home">
-                </a>
-                <a href="{% url 'main:show_experience' %}" class="nav-link">Experience</a>              
-                <a href="{% url 'main:show_highlights' %}" class="nav-link">Highlights</a>
-                <a href="{% url 'main:show_gallery' %}" class="nav-link">Gallery</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </nav>
-            <a href="/static/files/CV_Danar_Iqbal.pdf" download class="button button-secondary">Download CV</a>
-        </div>
-    </header>
+  {% extends 'base.html' %}
+  {% block content %}
 
     <main>
         <!-- Home profile -->
@@ -271,13 +244,4 @@
             </div>
         </section>
         </main>
-
-            <!-- Footer -->
-            <footer class="site-footer">
-                <div class="container"> 
-                <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>                
-            </div>
-            </footer>
-            <script src="/static/js/experience.js"></script>
-        </body>
-        </html>
+         {% endblock content %}
