@@ -9,6 +9,10 @@ from main.views import (
     show_projects,
     get_projects_json,
     delete_project,
+    create_highlight,
+    update_highlight,
+    delete_highlight,
+    get_highlights_json,
 )
 
 app_name = "main"
@@ -17,6 +21,10 @@ urlpatterns = [
     path("", show_main, name="show_main"),
     path("experience/", show_experience, name="show_experience"),
     path("highlights/", show_highlights, name="show_highlights"),
+     path("highlights/add/", create_highlight, name="create_highlight"),
+    path("highlights/<int:highlight_id>/edit/", update_highlight, name="update_highlight"),
+    path("highlights/<int:highlight_id>/delete/", delete_highlight, name="delete_highlight"),
+    path("api/highlights/", get_highlights_json, name="get_highlights_json"),
     path("gallery/", show_gallery, name="show_gallery"),
     path("projects/add/", create_project, name="create_project"),
     path("projects/", show_projects,name="show_projects"),

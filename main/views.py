@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from main.models import Experience, GalleryItem, Highlight, Project
-from main.forms import ProjectForm
+from main.forms import ProjectForm, HighlightForm
 
 def show_main(request):
     context = {
@@ -26,11 +26,69 @@ def show_experience(request):
 
 
 def show_highlights(request):
+    json_response = get_highlights_json(request)
+
+    highlights = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    highlights = [highlight.object for highlight in highlights]
+
     context = {
         "name": "Danar Iqbal Abi Zaidan Suharso",
-        "highlights": Highlight.objects.all().order_by("-year", "title"),
+        "highlights": highlights,
     }
     return render(request, "highlights.html", context)
+
+def get_highlights_json(request):
+    highlights = Highlight.objects.all().order_by("-year", "title")
+    highlights_json = serializers.serialize("json", highlights)
+    return HttpResponse(highlights_json, content_type="application/json")
+
+
+def create_highlight(request):
+    form = HighlightForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Highlight baru berhasil ditambahkan!")
+        return redirect("main:show_highlights")
+
+    context = {
+        "name": "Danar",
+        "form": form,
+        "is_edit": False,
+    }
+    return render(request, "highlights_form.html", context)
+
+
+def update_highlight(request, highlight_id):
+    highlight = get_object_or_404(Highlight, pk=highlight_id)
+    form = HighlightForm(request.POST or None, instance=highlight)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Highlight berhasil diperbarui!")
+        return redirect("main:show_highlights")
+
+    context = {
+        "name": "Danar",
+        "form": form,
+        "is_edit": True,
+        "highlight": highlight,
+    }
+    return render(request, "highlights_form.html", context)
+
+
+def delete_highlight(request, highlight_id):
+    highlight = get_object_or_404(Highlight, pk=highlight_id)
+
+    if request.method == "POST":
+        highlight.delete()
+        messages.success(request, "Highlight berhasil dihapus!")
+        return redirect("main:show_highlights")
+
+    return redirect("main:show_highlights")
 
 
 def show_gallery(request):

@@ -1,0 +1,41 @@
+<button type="button"
+        class="button button-danger"
+        popovertarget="delete-highlight-{{ highlight.id }}"
+        aria-label="Hapus {{ highlight.title }}"
+        title="Hapus highlight">
+    Hapus
+</button>
+<div id="delete-highlight-{{ highlight.id }}"
+     class="project-delete-modal"
+     popover="auto"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="delete-highlight-title-{{ highlight.id }}">
+    <button type="button"
+            class="project-delete-modal__backdrop"
+            popovertarget="delete-highlight-{{ highlight.id }}"
+            popovertargetaction="hide"
+            aria-label="Tutup konfirmasi hapus"></button>
+    <div class="project-delete-modal__content">
+        <button type="button"
+                class="project-delete-modal__close"
+                popovertarget="delete-highlight-{{ highlight.id }}"
+                popovertargetaction="hide"
+                aria-label="Tutup konfirmasi hapus">×</button>
+        <h2 id="delete-highlight-title-{{ highlight.id }}">Hapus Highlight?</h2>
+        <p>
+            Apakah Anda yakin ingin menghapus
+            <strong>{{ highlight.title }}</strong>?
+        </p>
+        <div class="project-delete-modal__actions">
+            <button type="button"
+                    class="button button-secondary"
+                    popovertarget="delete-highlight-{{ highlight.id }}"
+                    popovertargetaction="hide">Batal</button>
+            <form method="post" action="{% url 'main:delete_highlight' highlight.id %}">
+                {% csrf_token %}
+                <button type="submit" class="button button-danger">Ya, Hapus</button>
+            </form>
+        </div>
+    </div>
+</div>
