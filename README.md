@@ -149,3 +149,70 @@ Saya banyak menyusun kode ini secara mandiri tanpa AI pada bagian:
 - Coding manual, jika terdesak atau tidak works saya minta crosscheck ke AI
 
 https://chatgpt.com/s/cx_6aa7b6345100819186c6964a7cc1c47d
+
+
+### About The Project MINGGU - 3
+Jadi di minggu ketiga ini website portofolio pribadi sudah dikembangkan dengan menambahkan fitur form dan data delivery menggunakan Django. Pada tahap ini kita harus melakukan refactoring terhadap halaman HTML yang memiliki struktur sama dengan menggunakan template inheritance (`base.html`) sehingga navbar, footer, dan struktur utama tidak perlu ditulis berulang pada setiap halaman.
+
+Fitur baru yang ditambahkan:
+- Form untuk menambahkan data baru menggunakan Django ModelForm.
+- Fitur update/edit data menggunakan form berdasarkan id data yang dipilih.
+- Fitur delete data untuk menghapus data dari database.
+- Penyediaan data portofolio dalam format JSON melalui view Django.
+- Deserialisasi data JSON agar data dapat kembali digunakan oleh aplikasi.
+
+Bagian portofolio yang dikembangkan menggunakan fitur ini adalah:
+- Projects: data proyek dapat ditambahkan, diperbarui, dihapus, serta tersedia dalam format JSON.
+- Highlights: data pencapaian/kegiatan dapat dikelola secara dinamis melalui database.
+
+Dengan implementasi ini, data portofolio tidak lagi ditulis secara hardcode di HTML, tetapi sudah tersimpan dalam database dan dapat dikelola melalui sistem Django.
+
+### Setup Minggu 3
+1. Aktifkan virtual environment:
+```bash
+env\Scripts\activate
+
+2. Pastikan dependencies udah aktif:
+'''pip install -r requirements.txt'''
+
+3. Jalankan migrasi db:
+python manage.py makemigrations
+python manage.py migrate
+
+4. Jalankan checker Django
+python manage.py check
+
+5. Run serve Django:
+python manage.py runserver
+
+6. Buka website lewat local:
+'''http://127.0.0.1:8000'''
+
+
+### Setup Minggu 3
+
+1. Jelaskan mengapa menggunakan ModelForm dan mengapa perlu menambahkan {% csrf_token %} pada form.
+Saya menggunakan ModelForm dibandingkan membuat form HTML secara manual karena ModelForm memudahkan proses pembuatan form dengan cara ambil lansgung struktur field dari model yang sudah dibuat sebelumnya, seperti Highlight / Project. Sehingga saya tidak perlu menuliskan setiap elemen <input> secara manual lagi. Selain itu, validasi data juga otomatis mengikuti tipe field yang ada di model. Misalnya field year akan divalidasi sebagai angka dan field seperti thumbnail atau URL akan mengikuti aturan validasi URL yang sudah tersedia di Django.
+
+Saya juga menambahkan {% csrf_token %} pada setiap form karena Django membutuhkan token tsb untuk memastikan bahwa request POST yang dikirim benar-benar berasal dari halaman website saya sendiri. Token ini digunakan untuk mencegah serangan CSRF yaitu kondisi ketika website lain mencoba mengirim request palsu menggunakan sesi pengguna yang sedang aktif. Dengan adanya CSRF token, Django dapat memverifikasi bahwa data yang dikirim berasal dari sumber yang valid sehingga proses CRUD menjadi lebih aman.
+
+2. Mengapa JSON lebih sering digunakan dibandingkan XML dalam pengembangan web modern?
+JSON lebih banyak digunakan dalam pengembangan web modern karena memiliki struktur yang lebih sederhana dan bisa dimengerti dibandingkan XML. Pada XML, setiap elemen harus memiliki tag pembuka dan penutup sehingga ukuran data yang dikirim cenderung lebih besar. Sementara itu, JSON menggunakan format pasangan key-value sehingga lebih ringkas dan lebih cepat dikirim melalui jaringan.
+
+Selain itu, JSON sangat mudah dicombine dengan JS karena dapat langsung dikonversi menjadi object menggunakan fungsi seperti JSON.parse(). Hal ini membuat JSON lebih cocok digunakan pada sisi frontend, terutama dalam komunikasi antara client dan server. Berbeda dengan XML yang biasanya membutuhkan proses parsing tambahan. Hampir semua bahasa pemrograman modern juga sudah mendukung JSON sehingga format ini sering digunakan dalam pembuatan REST API untuk pertukaran data antara aplikasi, server, maupun frontend.
+
+3. Jelaskan alur ketika view mengembalikan data dalam bentuk JSON dan alasan perlu melakukan serialization.
+Ketika view mengembalikan data dalam bentuk response JSON, prosesnya dimulai dengan mengambil data dari database melalui model Django. Misalnya pada bagian project, saya mengambil data menggunakan Project.objects.all(), sedangkan pada bagian highlights menggunakan Highlight.objects.all().
+
+Data yang diambil tersebut masih berupa objek Django, sehingga belum bisa langsung dikirim sebagai response HTTP. Oleh karena itu, dilakukan proses serialization menggunakan serializers.serialize("json", queryset) untuk mengubah objek Django tsb ke format JSON yang dapat dibaca oleh browser atau aplikasi lain. Setelah berhasil diubah menjadi JSON, data tersebut dikirim melalui Http Response dengan content_type="application/json" agar client mengetahui bahwa response yang diterima berupa data JSON, bukan halaman HTML biasa lagi
+
+Serialization diperlukan karena objek model Django memiliki struktur khusus yang hanya dipahami oleh Python dan Django, seperti hubungan dengan database serta method tertentu. Dengan serialization, data tersebut diubah menjadi format teks yang lebih umum sehingga dapat digunakan oleh berbagai platform atau bahasa pemrograman lain. Dan sebaliknya, ketika data JSON ingin digunakan kembali dalam aplikasi, proses deserialization dilakukan untuk mengubah data JSON kembali menjadi objek yang dapat diakses dalam Django. Dengan begitu, data seperti project.title atau highlight.year dapat digunakan kembali dan ditampilkan pada template website.
+
+### AI DISCLOSURE
+Pada minggu ini saya menggunakan Claude untu:
+- Membantu debug error pada tutorial3 dan tugas3 ketika data primary.id mengalami mismatch.
+- Membantu debug navbar yang tidak konsisten dan error ditampilan local host
+- Membantu debug ketika ada typo dalam code yang tidak terdeteksi secara manual
+https://claude.ai/share/0eadd853-5eea-4920-aa15-7a2d0392b5ea
+
+Sisanya saya melakukan explore sendiri karena tutorial3 sudah memberikan instruksi dengan jelas, dan tugas3 hanya melanjutkan tutorial3 saja.
