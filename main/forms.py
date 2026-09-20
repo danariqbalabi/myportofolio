@@ -1,6 +1,6 @@
-from django.forms import ModelForm, TextInput, Textarea, URLInput, NumberInput
+from django.forms import ModelForm, TextInput, Textarea, URLInput, NumberInput, Select, CheckboxInput
 
-from main.models import Project, Highlight
+from main.models import Project, Highlight, GalleryItem, Experience
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -100,4 +100,105 @@ class HighlightForm(ModelForm):
                     "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
                 }
             ),
+        }
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = [
+            "title",
+            "description",
+            "category",
+            "thumbnail",
+        ]
+
+        labels = {
+            "title": "Nama Pengalaman",
+            "description": "Deskripsi",
+            "category": "Kategori",
+            "thumbnail": "URL Gambar",
+        }
+
+        widgets = {
+            "title": TextInput(
+                attrs={
+                    "placeholder": "Backend Developer Intern",
+                    "maxlength": 255,
+                }
+            ),
+            "description": Textarea(
+                attrs={
+                    "placeholder": "Ceritakan pengalamanmu",
+                    "rows": 3,
+                }
+            ),
+            "category": Select(),
+            "thumbnail": URLInput(
+                attrs={
+                    "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
+                }
+            ),
+        }
+
+
+class GalleryItemForm(ModelForm):
+    class Meta:
+        model = GalleryItem
+        fields = [
+            "title",
+            "caption",
+            "category",
+            "location",
+            "year",
+            "image",
+            "featured",
+        ]
+
+        labels = {
+            "title": "Judul",
+            "caption": "Caption",
+            "category": "Kategori",
+            "location": "Lokasi",
+            "year": "Tahun",
+            "image": "URL Gambar",
+            "featured": "Tampilkan sebagai Featured",
+        }
+
+        widgets = {
+            "title": TextInput(
+                attrs={
+                    "placeholder": "Sunrise at Kawah Ratu",
+                    "maxlength": 255,
+                }
+            ),
+            "caption": Textarea(
+                attrs={
+                    "placeholder": "Ceritakan momen ini",
+                    "rows": 3,
+                }
+            ),
+            "category": TextInput(
+                attrs={
+                    "placeholder": "Travel, Event, Hobby, dll",
+                    "maxlength": 100,
+                }
+            ),
+            "location": TextInput(
+                attrs={
+                    "placeholder": "Sukabumi, Jawa Barat",
+                    "maxlength": 255,
+                }
+            ),
+            "year": NumberInput(
+                attrs={
+                    "placeholder": "2026",
+                    "min": 2000,
+                    "max": 2100,
+                }
+            ),
+            "image": URLInput(
+                attrs={
+                    "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
+                }
+            ),
+            "featured": CheckboxInput(),
         }

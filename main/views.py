@@ -1,10 +1,10 @@
 from django.contrib import messages
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.shortcuts import get_object_or_404, redirect, render
 
 from main.models import Experience, GalleryItem, Highlight, Project
-from main.forms import ProjectForm, HighlightForm
+from main.forms import ProjectForm, HighlightForm,ExperienceForm, GalleryItemForm
 
 def show_main(request):
     context = {
@@ -18,11 +18,69 @@ def show_main(request):
 
 
 def show_experience(request):
+    json_response = get_experiences_json(request)
+
+    experiences = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    experiences = [experience.object for experience in experiences]
+
     context = {
         "name": "Danar Iqbal Abi Zaidan Suharso",
-        "experience_list": Experience.objects.all(),
+        "experience_list": experiences,
     }
     return render(request, "experience.html", context)
+
+def get_experiences_json(request):
+    experiences = Experience.objects.all()
+    experiences_json = serializers.serialize("json", experiences)
+    return HttpResponse(experiences_json, content_type="application/json")
+
+
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Pengalaman baru berhasil ditambahkan!")
+        return redirect("main:show_experience")
+
+    context = {
+        "name": "Danar",
+        "form": form,
+        "is_edit": False,
+    }
+    return render(request, "experience_form.html", context)
+
+
+def update_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    form = ExperienceForm(request.POST or None, instance=experience)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Pengalaman berhasil diperbarui!")
+        return redirect("main:show_experience")
+
+    context = {
+        "name": "Danar",
+        "form": form,
+        "is_edit": True,
+        "experience": experience,
+    }
+    return render(request, "experience_form.html", context)
+
+
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        experience.delete()
+        messages.success(request, "Pengalaman berhasil dihapus!")
+        return redirect("main:show_experience")
+
+    return redirect("main:show_experience")
 
 
 def show_highlights(request):
@@ -92,11 +150,70 @@ def delete_highlight(request, highlight_id):
 
 
 def show_gallery(request):
+    json_response = get_gallery_items_json(request)
+
+    gallery_items = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    gallery_items = [item.object for item in gallery_items]
+
     context = {
         "name": "Danar Iqbal Abi Zaidan Suharso",
-        "gallery_items": GalleryItem.objects.all().order_by("-featured", "-year"),
+        "gallery_items": gallery_items,
     }
     return render(request, "gallery.html", context)
+
+
+def get_gallery_items_json(request):
+    gallery_items = GalleryItem.objects.all().order_by("-featured", "-year")
+    gallery_items_json = serializers.serialize("json", gallery_items)
+    return HttpResponse(gallery_items_json, content_type="application/json")
+
+
+def create_gallery_item(request):
+    form = GalleryItemForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Foto baru berhasil ditambahkan!")
+        return redirect("main:show_gallery")
+
+    context = {
+        "name": "Danar",
+        "form": form,
+        "is_edit": False,
+    }
+    return render(request, "gallery_form.html", context)
+
+
+def update_gallery_item(request, item_id):
+    item = get_object_or_404(GalleryItem, pk=item_id)
+    form = GalleryItemForm(request.POST or None, instance=item)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Foto berhasil diperbarui!")
+        return redirect("main:show_gallery")
+
+    context = {
+        "name": "Danar",
+        "form": form,
+        "is_edit": True,
+        "item": item,
+    }
+    return render(request, "gallery_form.html", context)
+
+
+def delete_gallery_item(request, item_id):
+    item = get_object_or_404(GalleryItem, pk=item_id)
+
+    if request.method == "POST":
+        item.delete()
+        messages.success(request, "Foto berhasil dihapus!")
+        return redirect("main:show_gallery")
+
+    return redirect("main:show_gallery")
 
 def create_project(request):
     form = ProjectForm(request.POST or None)

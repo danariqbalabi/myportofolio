@@ -12,7 +12,11 @@
                         <h1>Moments beyond the classroom.</h1>
                         <p>Trail logs, campus events, and views in between.</p>
                     </div>
-                    <span class="gallery-hint">&larr; Slide to explore &rarr;</span>
+                    <a href="{% url 'main:create_gallery_item' %}"
+                       class="button button-primary project-add-button">
+                        <span aria-hidden="true">+</span>
+                        Tambah Foto
+                    </a>
                 </div>
 
                 <div class="gallery-track">
@@ -34,6 +38,10 @@
                                 {% if item.caption %}
                                     <p class="gallery-caption">{{ item.caption }}</p>
                                 {% endif %}
+                                <div class="project-actions">
+                                    <a href="{% url 'main:update_gallery_item' item.id %}" class="button">Edit</a>
+                                    {% include "components/gallery_delete_modal.html" with item=item %}
+                                </div>
                             </div>
                         </article>
                     {% empty %}
