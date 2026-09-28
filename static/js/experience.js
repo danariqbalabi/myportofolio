@@ -12,6 +12,13 @@ const nextButton = document.querySelector(
 
 let activeIndex = 0;
 
+function moveCarousel(step) {
+    activeIndex =
+        (activeIndex + step + cards.length) % cards.length;
+
+    updateCarousel();
+}
+
 function updateCarousel() {
     cards.forEach((card, index) => {
         card.classList.remove(
@@ -40,19 +47,9 @@ function updateCarousel() {
     });
 }
 
-previousButton.addEventListener("click", () => {
-    activeIndex =
-        (activeIndex - 1 + cards.length) % cards.length;
+previousButton?.addEventListener("click", () => moveCarousel(-1));
 
-    updateCarousel();
-});
-
-nextButton.addEventListener("click", () => {
-    activeIndex =
-        (activeIndex + 1) % cards.length;
-
-    updateCarousel();
-});
+nextButton?.addEventListener("click", () => moveCarousel(1));
 
 cards.forEach((card, index) => {
     card.addEventListener("click", () => {
@@ -61,4 +58,25 @@ cards.forEach((card, index) => {
     });
 });
 
-updateCarousel();
+const stage = document.querySelector(".experience-stage");
+let touchStartX = null;
+
+stage?.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].clientX;
+}, { passive: true });
+
+stage?.addEventListener("touchend", (event) => {
+    if (touchStartX === null) return;
+
+    const distance = event.changedTouches[0].clientX - touchStartX;
+
+    if (Math.abs(distance) >= 50) {
+        moveCarousel(distance < 0 ? 1 : -1);
+    }
+
+    touchStartX = null;
+}, { passive: true });
+
+if (cards.length > 0) {
+    updateCarousel();
+}
