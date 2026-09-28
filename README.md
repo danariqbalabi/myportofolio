@@ -216,3 +216,92 @@ Pada minggu ini saya menggunakan Claude untu:
 https://claude.ai/share/0eadd853-5eea-4920-aa15-7a2d0392b5ea
 
 Sisanya saya melakukan explore sendiri karena tutorial3 sudah memberikan instruksi dengan jelas, dan tugas3 hanya melanjutkan tutorial3 saja.
+
+
+### About The Project MINGGU - 4
+
+Pada minggu 4 ini website portofolio pribadi kita dikembangkan dengan fitur autentikasi, otorisasi, session, cookie, role permission, dan fitur star pada project.
+
+Fitur baru yang ditambahkan:
+- Register, login, dan logout menggunakan sistem autentikasi bawaan Django
+- Navbar menampilkan status login dan register utk pengguna
+- Cookie `last_login` disimpan saat login dan dihapus saat logout
+- Pembatasan akses server-side menggunakan `@login_required`, `PermissionDenied`, superuser, dan group `Editor`
+- Role `Editor` dapat mengubah data portfolio, tetapi tidak dapat membuat atau menghapus data
+- User biasa dapat membaca data dan memberi/membatalkan star pada project
+- Superuser sebagai pemilik portfolio dapat membuat, mengubah, dan menghapus data
+- Tombol create, edit, dan delete disembunyikan dari pengguna yang tidak memiliki hak akses tertentu
+
+Hak akses yang diterapkan per role nya:
+- Pengunjung tanpa login (guest): dapat membaca halaman portfolio, tetapi diarahkan ke login saat mencoba sesuatu yang membutuhkan login
+- User: dapat membaca data dan memberi/membatalkan star
+- Editor: dapat membaca dan mengubah data portfolio, tetapi tidak dapat membuat atau menghapus data
+- Superuser: dapat melakukan semua fitur CRUD (create, read, update, dan delete)
+
+### Setup Minggu 4
+
+1. Aktifkan virtual environment:
+```bash
+env\Scripts\activate
+```
+
+2. Jalankan migrasi database:
+```bash
+python manage.py migrate
+```
+
+3. Jalankan checker Django:
+```bash
+python manage.py check
+```
+
+4. Jalankan server:
+```bash
+python manage.py runserver
+```
+
+5. Buka website:
+```bash
+http://127.0.0.1:8000
+```
+
+### Catatan Role Editor
+
+Migration `0010_create_editor_group` membuat group bernama `Editor`. Untuk memberikan akses  ke editor:
+
+1. Login ke Django Admin sebagai superuser
+2. Buka menu Users
+3. Pilih user yang ingin dijadikan editor
+4. Masukkan user tersebut ke group `Editor`
+5. Simpan perubahan
+
+Setelah itu user tersebut dapat melihat tombol edit dan mengubah data, tetapi tetap tidak dapat melihat tombol tambah atau hapus.
+
+### Reflective Questions Tugas 4
+
+1. Mengapa pembatasan akses harus dilakukan di view/server-side, bukan hanya menyembunyikan tombol di template?
+
+Menyembunyikan tombol di template hanya mengubah tampilan dan bukan fitur keamanan. Pengguna masih bisa mengetik URL secara langsung, misalnya `/projects/add/` atau masuk endpoint delete tertentu. Karena itu, validasi hak akses harus tetap dilakukan di view menggunakan `@login_required` dan pengecekan role. Template tsb hanya berfungsi agar UI lebih rapi dan tidak menampilkan aksi yang memang tidak bisa digunakan
+
+2. Apa perbedaan user biasa, editor, dan superuser pada implementasi ini?
+
+User biasa hanya dapat membaca data dan memberi star pada project. Editor memiliki hak tambahan untuk mengubah data portfolio, tetapi tidak boleh membuat atau menghapus data. Superuser dianggap sebagai pemilik portfolio, sehingga dapat membuat, mengubah, dan menghapus data. Pembagian ini membuat perubahan data lebih terkontrol karena setiap role hanya mendapat akses sesuai kebutuhan
+
+3. Mengapa fitur star menggunakan `ManyToManyField` ke model `User`?
+
+Satu project dapat diberi star oleh banyak user, dan satu user juga dapat memberi star ke banyak project. Relasi seperti ini cocok menggunakan `ManyToManyField`. Dengan relasi tersebut, Django juga mencegah duplikasi relasi yang sama, sehingga satu user tidak bisa memberi star berkali-kali pada project yang sama
+
+### AI DISCLOSURE MINGGU 4
+
+Pada minggu ini saya menggunakan bantuan Codex dengan log prompt yg sama untuk:
+- Mengecek kembali isi instruksi Tugas4 dan membedakannya dari instruksi di file PDF, apakah lanjutan dari Tutorial4 saja atau ada yang harus ditambahkan
+- Membantu debugging error `runserver` dan error URL import
+- Membantu mengecek kesesuaian Tutorial 4 dan Tugas 4 terhadap kode yang sudah dibuat
+- Membantu debug role `Editor`, pembatasan akses server-side, update project, dan penyesuaian tombol di template.
+
+Bagian yang tetap saya tentukan sendiri:
+- Struktur halaman portfolio yang ingin digunakan tetap berdasarkan apa yagn sudah saya buat dan saya ingingkan
+- Review akhir terhadap fitur yang muncul di halaman portfolio.
+- Manual coding mengikuti instruksi di Tutorial4
+
+AI LOG: https://chatgpt.com/s/cx_6aba196bbb448191b5da91e32978a3f5

@@ -280,7 +280,6 @@ def delete_gallery_item(request, item_id):
         raise PermissionDenied
 
     item = get_object_or_404(GalleryItem, pk=item_id)
-
     if request.method == "POST":
         item.delete()
         messages.success(request, "Foto berhasil dihapus!")
