@@ -11,11 +11,13 @@
                         <p class="section-kicker">Highlights</p>
                         <h1 class="highlights-page-title">Things I have worked on and experienced.</h1>
                     </div>
-                    <a href="{% url 'main:create_highlight' %}"
-                       class="button button-primary project-add-button">
-                        <span aria-hidden="true">+</span>
-                        Tambah Highlight
-                    </a>
+                    {% if can_create_portfolio %}
+                        <a href="{% url 'main:create_highlight' %}"
+                           class="button button-primary project-add-button">
+                            <span aria-hidden="true">+</span>
+                            Tambah Highlight
+                        </a>
+                    {% endif %}
                 </div>
 
                 <div class="highlights-grid">
@@ -32,8 +34,12 @@
                                 <p class="highlight-desc">{{ highlight.description }}</p>
                                 <span class="highlight-date">{{ highlight.year }}</span>
                                 <div class="project-actions">
-                                    <a href="{% url 'main:update_highlight' highlight.id %}" class="button">Edit</a>
-                                    {% include "components/highlight_delete_modal.html" with highlight=highlight %}
+                                    {% if can_edit_portfolio %}
+                                        <a href="{% url 'main:update_highlight' highlight.id %}" class="button">Edit</a>
+                                    {% endif %}
+                                    {% if can_delete_portfolio %}
+                                        {% include "components/highlight_delete_modal.html" with highlight=highlight %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </article>

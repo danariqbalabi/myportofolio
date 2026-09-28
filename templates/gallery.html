@@ -12,11 +12,13 @@
                         <h1>Moments beyond the classroom.</h1>
                         <p>Trail logs, campus events, and views in between.</p>
                     </div>
-                    <a href="{% url 'main:create_gallery_item' %}"
-                       class="button button-primary project-add-button">
-                        <span aria-hidden="true">+</span>
-                        Tambah Foto
-                    </a>
+                    {% if can_create_portfolio %}
+                        <a href="{% url 'main:create_gallery_item' %}"
+                           class="button button-primary project-add-button">
+                            <span aria-hidden="true">+</span>
+                            Tambah Foto
+                        </a>
+                    {% endif %}
                 </div>
 
                 <div class="gallery-track">
@@ -39,8 +41,12 @@
                                     <p class="gallery-caption">{{ item.caption }}</p>
                                 {% endif %}
                                 <div class="project-actions">
-                                    <a href="{% url 'main:update_gallery_item' item.id %}" class="button">Edit</a>
-                                    {% include "components/gallery_delete_modal.html" with item=item %}
+                                    {% if can_edit_portfolio %}
+                                        <a href="{% url 'main:update_gallery_item' item.id %}" class="button">Edit</a>
+                                    {% endif %}
+                                    {% if can_delete_portfolio %}
+                                        {% include "components/gallery_delete_modal.html" with item=item %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </article>
