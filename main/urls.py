@@ -10,6 +10,7 @@ from main.views import (
     get_projects_json,
     delete_project,
     create_highlight,
+    toggle_star,
     update_highlight,
     delete_highlight,
     get_highlights_json,
@@ -21,6 +22,9 @@ from main.views import (
     update_gallery_item,
     delete_gallery_item,
     get_gallery_items_json,
+    register,
+    login_user,
+    logout_user,
 )
 
 app_name = "main"
@@ -46,4 +50,12 @@ urlpatterns = [
     path("projects/", show_projects,name="show_projects"),
     path("api/projects/", get_projects_json, name="get_projects_json"),
     path("projects/<uuid:project_id>/delete/",delete_project,name="delete_project"),
+    path("register/", register, name="register"),
+    path("login/", login_user, name="login"),
+    path("logout/", logout_user, name="logout"),
+    path(
+    "projects/<uuid:project_id>/star/",
+    toggle_star,
+    name="toggle_star",
+),
 ]
