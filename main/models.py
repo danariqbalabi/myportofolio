@@ -46,6 +46,9 @@ class GalleryItem(models.Model):
     year = models.PositiveIntegerField()
     image = models.CharField(max_length=500)
     featured = models.BooleanField(default=False)
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_gallery_items", blank=True
+    )
 
     def __str__(self):
         return self.title

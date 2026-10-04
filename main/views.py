@@ -211,26 +211,45 @@ def delete_highlight(request, highlight_id):
 
 
 def show_gallery(request):
-    json_response = get_gallery_items_json(request)
-
-    gallery_items = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    gallery_items = [item.object for item in gallery_items]
-
     context = {
         "name": OWNER_NAME,
-        "gallery_items": gallery_items,
+        "title_query": request.GET.get("title", "").strip(),
+        "form": GalleryItemForm(),
         **portfolio_permissions(request.user),
     }
     return render(request, "gallery.html", context)
 
 
 def get_gallery_items_json(request):
-    gallery_items = GalleryItem.objects.all().order_by("-featured", "-year")
-    gallery_items_json = serializers.serialize("json", gallery_items)
-    return HttpResponse(gallery_items_json, content_type="application/json")
+    title_query = request.GET.get("title", "").strip()
+    gallery_items = GalleryItem.objects.prefetch_related("starred_by").all().order_by("-featured", "-year", "title")
+
+    if title_query:
+        gallery_items = gallery_items.filter(title__icontains=title_query)
+
+    data = []
+    for item in gallery_items:
+        starred_users = item.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([user.username for user in starred_users])
+
+        data.append({
+            "pk": item.id,
+            "fields": {
+                "title": item.title,
+                "caption": item.caption,
+                "category": item.category,
+                "location": item.location,
+                "year": item.year,
+                "image": item.image,
+                "featured": item.featured,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            },
+        })
+
+    return JsonResponse(data, safe=False)
 
 
 @login_required(login_url="/login/")
@@ -287,6 +306,38 @@ def delete_gallery_item(request, item_id):
         return redirect("main:show_gallery")
 
     return redirect("main:show_gallery")
+
+
+@login_required(login_url="/login/")
+def toggle_gallery_star(request, item_id):
+    item = get_object_or_404(GalleryItem, pk=item_id)
+
+    if request.method == "POST":
+        if request.user in item.starred_by.all():
+            item.starred_by.remove(request.user)
+        else:
+            item.starred_by.add(request.user)
+
+    return redirect("main:show_gallery")
+
+
+@require_POST
+def create_gallery_item_ajax(request):
+    if not can_create_or_delete_portfolio(request.user):
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan foto."},
+            status=403,
+        )
+
+    form = GalleryItemForm(request.POST)
+    if form.is_valid():
+        item = form.save()
+        return JsonResponse(
+            {"message": "Foto berhasil ditambahkan.", "pk": item.id},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
 
 @login_required(login_url="/login/")
 def create_project(request):

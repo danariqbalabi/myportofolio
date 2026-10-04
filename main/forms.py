@@ -217,3 +217,18 @@ class GalleryItemForm(ModelForm):
             ),
             "featured": CheckboxInput(),
         }
+
+    def clean_title(self):
+        title = strip_tags(self.cleaned_data["title"]).strip()
+        if not title:
+            raise ValidationError("Judul foto tidak boleh hanya berisi tag HTML.")
+        return title
+
+    def clean_caption(self):
+        return strip_tags(self.cleaned_data["caption"]).strip()
+
+    def clean_category(self):
+        return strip_tags(self.cleaned_data["category"]).strip()
+
+    def clean_location(self):
+        return strip_tags(self.cleaned_data["location"]).strip()
