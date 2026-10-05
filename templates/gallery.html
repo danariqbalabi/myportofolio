@@ -13,48 +13,253 @@
                         <p>Trail logs, campus events, and views in between.</p>
                     </div>
                     {% if can_create_portfolio %}
-                        <a href="{% url 'main:create_gallery_item' %}"
-                           class="button button-primary project-add-button">
+                        <button type="button"
+                                class="button button-primary project-add-button"
+                                popovertarget="add-gallery-modal">
                             <span aria-hidden="true">+</span>
                             Tambah Foto
-                        </a>
+                        </button>
                     {% endif %}
                 </div>
 
-                <div class="gallery-track">
-                    {% for item in gallery_items %}
-                        <article class="gallery-card">
-                            <div class="gallery-image-wrap">
-                                <img src="{{ item.image }}" alt="{{ item.title }}">
-                            </div>
-                            <div class="gallery-card-body">
-                                {% if item.category %}
-                                    <span class="gallery-category">{{ item.category }}</span>
-                                {% endif %}
-                                <h2>{{ item.title }}</h2>
-                                <p class="gallery-meta">
-                                    {% if item.location %}{{ item.location }}{% endif %}
-                                    {% if item.location and item.year %} · {% endif %}
-                                    {{ item.year }}
-                                </p>
-                                {% if item.caption %}
-                                    <p class="gallery-caption">{{ item.caption }}</p>
-                                {% endif %}
-                                <div class="project-actions">
-                                    {% if can_edit_portfolio %}
-                                        <a href="{% url 'main:update_gallery_item' item.id %}" class="button">Edit</a>
-                                    {% endif %}
-                                    {% if can_delete_portfolio %}
-                                        {% include "components/gallery_delete_modal.html" with item=item %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </article>
-                    {% empty %}
-                        <p class="empty-state">Belum ada foto di gallery.</p>
-                    {% endfor %}
+                <form id="gallery-search-form" class="project-search">
+                    <input type="search"
+                           id="gallery-search-input"
+                           name="title"
+                           value="{{ title_query }}"
+                           placeholder="Cari berdasarkan judul foto"
+                           class="project-search__input"
+                           aria-label="Cari berdasarkan judul foto">
+                    <button type="submit" class="button">Cari</button>
+                </form>
+
+                <div id="gallery-loading" class="empty-state hide">
+                    <p>Memuat gallery...</p>
                 </div>
+
+                <div id="gallery-error" class="empty-state hide">
+                    <p>Gagal memuat data gallery. Silakan coba lagi.</p>
+                </div>
+
+                <div id="gallery-empty" class="empty-state hide">
+                    <p>Belum ada foto di gallery atau tidak ada hasil pencarian.</p>
+                </div>
+
+                <div id="gallery-grid" class="gallery-track hide"></div>
             </div>
         </section>
     </main>
+
+    {% if can_create_portfolio %}
+        {% include "components/gallery_form_modal.html" %}
+    {% endif %}
+
+    <script>
+    const BASE_GALLERY_ENDPOINT = "{% url 'main:get_gallery_items_json' %}";
+    const CREATE_GALLERY_ENDPOINT = "{% url 'main:create_gallery_item_ajax' %}";
+    const CAN_EDIT_GALLERY = "{{ can_edit_portfolio|yesno:'true,false' }}" === "true";
+    const CAN_DELETE_GALLERY = "{{ can_delete_portfolio|yesno:'true,false' }}" === "true";
+    const GALLERY_SEARCH_DEBOUNCE_DELAY = 300;
+    let galleryAbortController;
+    let gallerySearchDebounceTimer;
+
+    const galleryLoadingState = document.getElementById('gallery-loading');
+    const galleryErrorState = document.getElementById('gallery-error');
+    const galleryEmptyState = document.getElementById('gallery-empty');
+    const galleryGrid = document.getElementById('gallery-grid');
+    const gallerySearchForm = document.getElementById('gallery-search-form');
+    const gallerySearchInput = document.getElementById('gallery-search-input');
+    const galleryForm = document.getElementById('gallery-form');
+
+    function displayGallerySection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+        galleryLoadingState.classList.toggle('hide', !showLoading);
+        galleryErrorState.classList.toggle('hide', !showError);
+        galleryEmptyState.classList.toggle('hide', !showEmpty);
+        galleryGrid.classList.toggle('hide', !showGrid);
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function buildGalleryCardElement(item) {
+        const galleryItem = item.fields;
+        const itemId = item.pk;
+
+        const articleElement = document.createElement('article');
+        articleElement.className = 'gallery-card';
+
+        const editUrl = "{% url 'main:update_gallery_item' 0 %}".replace('0', itemId);
+        const deleteUrl = "{% url 'main:delete_gallery_item' 0 %}".replace('0', itemId);
+        const starUrl = "{% url 'main:toggle_gallery_star' 0 %}".replace('0', itemId);
+
+        const categoryHtml = galleryItem.category
+            ? `<span class="gallery-category">${escapeHtml(galleryItem.category)}</span>`
+            : '';
+        const location = escapeHtml(galleryItem.location);
+        const metaHtml = location
+            ? `${location} &middot; ${escapeHtml(galleryItem.year)}`
+            : `${escapeHtml(galleryItem.year)}`;
+        const captionHtml = galleryItem.caption
+            ? `<p class="gallery-caption">${escapeHtml(galleryItem.caption)}</p>`
+            : '';
+        const editHtml = CAN_EDIT_GALLERY
+            ? `<a href="${editUrl}" class="button">Edit</a>`
+            : '';
+        const deleteHtml = CAN_DELETE_GALLERY
+            ? `<form method="post" action="${deleteUrl}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="button button-danger" onclick="return confirm('Yakin ingin menghapus foto ini?');">Hapus</button>
+            </form>`
+            : '';
+        const isStarredClass = galleryItem.is_starred ? " is-starred" : "";
+        const starText = galleryItem.is_starred ? "Unstar" : "Star";
+        const starTitle = galleryItem.star_count > 0
+            ? `Dibintangi oleh ${escapeHtml(galleryItem.starred_by_names)}`
+            : "Jadilah yang pertama memberi star";
+
+        articleElement.innerHTML = `
+            <div class="gallery-image-wrap">
+                <img src="${escapeHtml(galleryItem.image)}" alt="${escapeHtml(galleryItem.title)}">
+            </div>
+            <div class="gallery-card-body">
+                ${categoryHtml}
+                <h2>${escapeHtml(galleryItem.title)}</h2>
+                <p class="gallery-meta">${metaHtml}</p>
+                ${captionHtml}
+                <div class="project-actions">
+                    <form method="post" action="${starUrl}" class="star-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="button button-star${isStarredClass}"
+                                title="${starTitle}">
+                            <span aria-hidden="true">&#9733;</span>
+                            ${starText}
+                            <span class="star-count">${galleryItem.star_count}</span>
+                        </button>
+                    </form>
+                    ${editHtml}
+                    ${deleteHtml}
+                </div>
+            </div>
+        `;
+
+        return articleElement;
+    }
+
+    async function fetchGalleryItems(searchQuery = "") {
+        if (galleryAbortController) galleryAbortController.abort();
+        galleryAbortController = new AbortController();
+
+        try {
+            displayGallerySection({ showLoading: true });
+
+            const url = searchQuery
+                ? `${BASE_GALLERY_ENDPOINT}?title=${encodeURIComponent(searchQuery)}`
+                : BASE_GALLERY_ENDPOINT;
+
+            const response = await fetch(url, {
+                headers: { 'Accept': 'application/json' },
+                signal: galleryAbortController.signal,
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch gallery data');
+
+            const galleryData = await response.json();
+            galleryGrid.innerHTML = '';
+
+            if (galleryData.length === 0) {
+                displayGallerySection({ showEmpty: true });
+                return;
+            }
+
+            galleryData.forEach(item => {
+                galleryGrid.appendChild(buildGalleryCardElement(item));
+            });
+            displayGallerySection({ showGrid: true });
+        } catch (error) {
+            if (error.name === 'AbortError') return;
+            console.error('Error loading gallery:', error);
+            displayGallerySection({ showError: true });
+        }
+    }
+
+    function closeGalleryModal() {
+        document.getElementById('add-gallery-modal')?.hidePopover();
+    }
+
+    function searchGalleryItems() {
+        fetchGalleryItems(gallerySearchInput.value.trim());
+    }
+
+    gallerySearchInput.addEventListener('input', function() {
+        clearTimeout(gallerySearchDebounceTimer);
+        gallerySearchDebounceTimer = setTimeout(searchGalleryItems, GALLERY_SEARCH_DEBOUNCE_DELAY);
+    });
+
+    gallerySearchForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        clearTimeout(gallerySearchDebounceTimer);
+        searchGalleryItems();
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async function addGalleryItem(event) {
+        event.preventDefault();
+
+        const submitButton = galleryForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(CREATE_GALLERY_ENDPOINT, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: new FormData(galleryForm),
+            });
+            const result = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                galleryForm.reset();
+                closeGalleryModal();
+                showToast('Berhasil', 'Foto baru berhasil ditambahkan!', 'success');
+                fetchGalleryItems(gallerySearchInput.value.trim());
+            } else {
+                const errorMessages = result.errors
+                    ? Object.values(result.errors).flat().map(error => error.message)
+                    : [result.message || `Terjadi kesalahan (status ${response.status}).`];
+                showToast('Gagal menambahkan foto', errorMessages.join(' '), 'error');
+            }
+        } catch (error) {
+            console.error('Error adding gallery item:', error);
+            showToast('Gagal menambahkan foto', 'Tidak dapat terhubung ke server. Silakan coba lagi.', 'error');
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+    if (galleryForm) {
+        galleryForm.addEventListener('submit', addGalleryItem);
+    }
+
+    fetchGalleryItems(gallerySearchInput.value.trim());
+    </script>
 {% endblock content %}
