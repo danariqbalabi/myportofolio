@@ -305,3 +305,75 @@ Bagian yang tetap saya tentukan sendiri:
 - Manual coding mengikuti instruksi di Tutorial4
 
 AI LOG: https://chatgpt.com/s/cx_6aba196bbb448191b5da91e32978a3f5
+
+
+### About The Project MINGGU - 5
+
+Di minggu 5 ini web portofolio pribadi dikembangkan dengan penambahan JS dan AJAX. Bagian yang saya kembangkan untuk tugas ini adalah section page Gallery, karena halaman Projects sudah digunakan sebagai contoh pada tutorial 5
+
+Fitur baru yang ditambahkan:
+- Data Gallery dimuat menggunakan AJAX melalui endpoint `/api/gallery/`
+- Search Gallery berdasarkan judul foto berjalan tanpa reload halaman
+- Search menggunakan debouncing agar request tidak dikirim setiap kali user mengetik satu huruf
+- Form tambah foto Gallery ditampilkan di dalam modal pada halaman Gallery
+- Penambahan foto dilakukan menggunakan Fetch API ke endpoint `/gallery/add-ajax/`
+- Setelah foto berhasil ditambahkan, daftar Gallery diperbarui tanpa reload halaman
+- Toast ditampilkan ketika tambah foto berhasil atau gagal
+- Gallery memiliki fitur star seperti Projects, lengkap dengan jumlah star dan status star user saat ini
+- Data yang dirender lewat JavaScript di-escape menggunakan `escapeHtml`
+- Input teks Gallery dibersihkan di sisi server menggunakan `strip_tags` pada `GalleryItemForm`
+
+### Setup Minggu 5
+
+1. Aktifkan virtual environment:
+```bash
+env\Scripts\activate
+```
+
+2. Jalankan migrasi database:
+```bash
+python manage.py migrate
+```
+
+3. Jalankan checker Django:
+```bash
+python manage.py check
+```
+
+4. Jalankan server:
+```bash
+python manage.py runserver
+```
+
+5. Buka halaman Gallery:
+```bash
+http://127.0.0.1:8000/gallery/
+```
+
+6. Untuk mencoba fitur tambah foto, login sebagai superuser terlebih dahulu. User biasa dan guest tetap dapat melihat data Gallery, tetapi tidak dapat menambahkan data.
+
+### Tugas 5
+
+1. Debouncing adalah cara menunda eksekusi fungsi sampai user berhenti melakukan input selama durasi tertentu. Pada fitur pencarian AJAX, debouncing sangat penting karena tanpa debounce browser akan mengirim request untuk setiap karakter yang diketik. Misalnya ketika user mengetik kata `bangkok`, aplikasi bisa mengirim banyak request berurutan ke server. Dengan debouncing, request hanya dikirim setelah user berhenti mengetik sebentar, misalnya 300 ms. Ini membuat fitur search tetap terasa responsif, tapi juga lebih hemat request dan tidak membebani server
+
+2. `await` digunakan untuk menunggu proses asynchronous selesai sebelum kode lanjut ke line berikutnya. Saat memakai `fetch()`, browser mengirim request ke server dan butuh waktu sampai response diterima. Dengan `await`, kode seperti `const response = await fetch(url)` akan menunggu response dulu, lalu baru menjalankan proses berikutnya seperti `await response.json()`. Jika tidak menggunakan `await`, variabel yang didapat masih berupa Promise, bukan data response yang sudah selesai. Akibatnya kode bisa mencoba membaca data sebelum request selesai dan menyebabkan error atau hasil yang tidak sesuai
+
+3. XSS atau Cross-Site Scripting adalah serangan ketika penyerang menyisipkan script berbahaya ke halaman web agar dijalankan di browser pengguna lain. Data yang ditampilkan lewat AJAX/JavaScript lebih rentan jika kita memasukkan data ke halaman menggunakan `innerHTML`, karena browser akan memperlakukan string tersebut sebagai HTML sungguhan. Pada template Django biasa, variabel seperti `{{ title }}` otomatis di-escape sehingga tag HTML berbahaya tampil sebagai teks. Namun ketika data JSON dirender manual dengan JavaScript, perlindungan auto-escape Django tidak berlaku. Karena itu, setiap data dari JSON yang dimasukkan ke HTML harus di-escape dengan fungsi seperti `escapeHtml`, dan input teks juga dibersihkan di server menggunakan `strip_tags`
+
+### AI DISCLOSURE MINGGU 5
+
+Pada minggu ini saya menggunakan bantuan Codex untuk:
+- Membaca instruksi Tugas 5 dari PDF dan membedakan instruksi tugas dari instruksi pengguna
+- Memecah pengerjaan menjadi commit bertahap agar riwayat Git lebih rapi
+- Membantu debugging masalah Git permission di folder OneDrive saat commit
+
+Bagian yang tetap saya tentukan sendiri:
+- Memilih Gallery sebagai bagian portofolio yang dikembangkan untuk Tugas 5
+- Menentukan isi data portofolio dan arah tampilan halaman
+- Melakukan review hasil akhir di browser lokal
+- Menentukan kapan setiap tahap harus di-commit agar sesuai kebutuhan pengumpulan bertahap
+- Coding based on tutorial 5
+
+Strategi prompting yang saya gunakan adalah meminta Codex mengecek instruksi terlebih dahulu, lalu mengerjakan fitur per tahap sendiridan melakukan commit yg punya cakupan yang jelas. Saya juga meminta Codex menjalankan test setelah setiap tahap supaya bug dapat ditemukan sebelum push ke GitHub atau PWS.
+
+https://chatgpt.com/s/cx_6aa7b6345100819186c6964a7cc1c47d
