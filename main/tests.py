@@ -10,6 +10,8 @@ from main.models import Experience, GalleryItem, Highlight
 
 class MainTest(TestCase):
     def setUp(self):
+        # Isolate assertions from the experiences inserted by migration 0005.
+        Experience.objects.all().delete()
         self.experience = Experience.objects.create(
             title="Asisten Dosen PBP",
             description="Membantu mahasiswa memahami pengembangan web.",
@@ -213,15 +215,19 @@ class GalleryPageTest(TestCase):
         self.assertTemplateUsed(response, "gallery.html")
 
     def test_gallery_data_and_images_are_displayed(self):
-        response = self.client.get(reverse("main:show_gallery"))
+        # Gallery cards are populated by JavaScript from the JSON endpoint.
+        response = self.client.get(reverse("main:get_gallery_items_json"))
+        self.assertEqual(response.status_code, 200)
+        items = {item["pk"]: item["fields"] for item in response.json()}
 
         for item in self.gallery_items:
-            self.assertContains(response, item.title)
-            self.assertContains(response, item.caption)
-            self.assertContains(response, item.image)
+            self.assertEqual(items[item.pk]["title"], item.title)
+            self.assertEqual(items[item.pk]["caption"], item.caption)
+            self.assertEqual(items[item.pk]["image"], item.image)
 
     def test_empty_gallery_message(self):
         GalleryItem.objects.all().delete()
         response = self.client.get(reverse("main:show_gallery"))
 
-        self.assertContains(response, "Belum ada foto di gallery.")
+        self.assertContains(response, "Belum ada foto di gallery atau tidak ada hasil pencarian.")
+        self.assertEqual(self.client.get(reverse("main:get_gallery_items_json")).json(), [])
