@@ -1,0 +1,38 @@
+{% load static %}
+{% csrf_token %}
+<script src="{% static 'js/portfolio-api.js' %}"></script>
+<script>
+const BASE_PROJECTS_ENDPOINT = "{% url 'api:project-list' %}";
+const DETAIL_PROJECT_ENDPOINT = "{% url 'api:project-detail' '00000000-0000-0000-0000-000000000000' %}";
+const IS_SUPERUSER = {{ user.is_superuser|yesno:'true,false' }};
+const IS_AUTHENTICATED = {{ user.is_authenticated|yesno:'true,false' }};
+const searchInput = document.getElementById('search-input');
+function projectEndpoint(pattern, id) { return pattern.replace('00000000-0000-0000-0000-000000000000', id); }
+function buildProjectCardElement(project) {
+    const article = document.createElement('article');
+    article.className = 'experience-card';
+    const imageUrl = safePortfolioUrl(project.project_image_url);
+    const projectUrl = safePortfolioUrl(project.project_url);
+    const image = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(project.title)}" class="project-image">` : '';
+    const link = projectUrl ? `<a href="${escapeHtml(projectUrl)}" class="button">Lihat Project</a>` : '';
+    const star = IS_AUTHENTICATED
+        ? `<button type="button" class="button button-star${project.is_starred ? ' is-starred' : ''}" data-action="star"
+            data-id="${escapeHtml(project.id)}" title="${escapeHtml(project.starred_by_names)}">${project.is_starred ? 'Unstar' : 'Star'} (${project.star_count})</button>`
+        : `<a href="{% url 'main:login' %}" class="button">Login untuk star (${project.star_count})</a>`;
+    const edit = IS_SUPERUSER ? `<a href="${projectEndpoint("{% url 'main:update_project' '00000000-0000-0000-0000-000000000000' %}", project.id)}" class="button button-secondary">Edit</a>` : '';
+    const remove = IS_SUPERUSER ? `<button type="button" class="button button-danger" data-action="delete" data-id="${escapeHtml(project.id)}">Hapus</button>` : '';
+    article.innerHTML = `${image}<h2>${escapeHtml(project.title)}</h2><span class="experience-category">${escapeHtml(project.tech_stack)}</span>
+        <p class="experience-description">${escapeHtml(project.description)}</p><div class="project-card-actions"><div class="project-actions">${link}${star}${edit}${remove}</div></div>`;
+    return article;
+}
+const {writeResource: writeProject, fetchResources: fetchProjects} = initPortfolioApi({
+    list: BASE_PROJECTS_ENDPOINT, detail: DETAIL_PROJECT_ENDPOINT,
+    star: "{% url 'api:project-star' '00000000-0000-0000-0000-000000000000' %}",
+    placeholder: '00000000-0000-0000-0000-000000000000',
+    grid: 'grid', loading: 'loading', error: 'error', empty: 'empty', search: 'search-input',
+    searchForm: 'project-search-form', form: 'project-form', modal: 'add-project-modal',
+    fields: ['title', 'description', 'tech_stack', 'project_url', 'project_image_url'],
+    createdMessage: 'Proyek baru berhasil ditambahkan!', deleteMessage: 'Yakin ingin menghapus proyek ini?',
+    buildCard: buildProjectCardElement,
+});
+</script>

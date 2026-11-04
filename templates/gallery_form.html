@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block meta %}
     <title>{% if is_edit %}Edit Foto{% else %}Tambah Foto{% endif %} - {{ name }}</title>
 {% endblock meta %}
@@ -8,6 +9,7 @@
             <div class="container">
                 <h1>{% if is_edit %}Edit Foto{% else %}Tambah Foto Baru{% endif %}</h1>
                 <form method="post"
+                      id="gallery-detail-form"
                       action="{% if is_edit %}{% url 'main:update_gallery_item' item.id %}{% else %}{% url 'main:create_gallery_item' %}{% endif %}"
                       class="project-form">
                     {% csrf_token %}
@@ -28,4 +30,28 @@
             </div>
         </section>
     </main>
+    <script src="{% static 'js/portfolio-api.js' %}"></script>
+    <script>
+    document.getElementById('gallery-detail-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const button = this.querySelector('button[type="submit"]');
+        if (button.disabled) return;
+        button.disabled = true;
+        try {
+            const fields = new FormData(this);
+            const payload = Object.fromEntries(['title', 'caption', 'category', 'location', 'year', 'image'].map(name => [name, fields.get(name)]));
+            payload.featured = fields.has('featured');
+            const response = await fetch("{% if is_edit %}{% url 'api:gallery-detail' item.id %}{% else %}{% url 'api:gallery-list' %}{% endif %}", {
+                method: '{% if is_edit %}PATCH{% else %}POST{% endif %}',
+                headers: {Accept: 'application/json', 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken')},
+                body: JSON.stringify(payload),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(Object.values(data).flat().join(' ') || `Permintaan gagal (HTTP ${response.status}).`);
+            window.location.assign("{% url 'main:show_gallery' %}");
+        } catch (error) {
+            showToast('Belum berhasil', error.message, 'error');
+        } finally { button.disabled = false; }
+    });
+    </script>
 {% endblock content %}
