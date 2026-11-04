@@ -23,6 +23,7 @@
                 <a href="{% url 'main:show_highlights' %}" class="nav-link">Highlights</a>
                 <a href="{% url 'main:show_gallery' %}" class="nav-link">Gallery</a>
                 <a href="{% url 'main:show_projects' %}" class="nav-link">Projects</a>
+                <a href="{% url 'contacts:contact_list' %}" class="nav-link">Contacts</a>
                 {% if user.is_authenticated %}
                 <span class="nav-user">{{ user.username }}</span>
                 <a href="{% url 'main:logout' %}" class="nav-link nav-link--auth">Logout</a>

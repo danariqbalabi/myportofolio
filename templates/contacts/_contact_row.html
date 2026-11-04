@@ -1,0 +1,12 @@
+<tr id="contact-{{ contact.pk }}" class="contact-row">
+  <td>{{ contact.name }}</td>
+  <td>{{ contact.email }}</td>
+  <td>{{ contact.phone|default:'-' }}</td>
+  <td class="actions">
+    <button type="button" hx-get="{% url 'contacts:contact_edit' contact.pk %}"
+            hx-target="closest tr" hx-swap="outerHTML">Edit</button>
+    <button type="button" class="danger" hx-delete="{% url 'contacts:contact_delete' contact.pk %}"
+            hx-target="closest tr" hx-swap="outerHTML"
+            hx-confirm="Yakin hapus {{ contact.name }}?">Hapus</button>
+  </td>
+</tr>

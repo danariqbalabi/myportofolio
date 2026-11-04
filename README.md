@@ -6,6 +6,9 @@ Bismillah A juga nilainya
 
 # Portfolio Website
 
+Tutorial 06 (HTMX) tersedia di `/contacts/`. Panduan menjalankan, fitur,
+latihan, dan pengujian ada di [contacts/README.md](contacts/README.md).
+
 
 ## About the Project
 
