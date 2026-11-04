@@ -6,6 +6,10 @@ Bismillah A juga nilainya
 
 # Portfolio Website
 
+Tutorial 07 (Django REST Framework) tersedia untuk Projects dan Gallery.
+Lihat [panduan Tutorial 7](docs/tutorial-7.md) untuk API, peran akses,
+cara menjalankan, pengujian, dan deployment.
+
 Tutorial 06 (HTMX) tersedia di `/contacts/`. Panduan menjalankan, fitur,
 latihan, dan pengujian ada di [contacts/README.md](contacts/README.md).
 

@@ -210,9 +210,9 @@ class GalleryItemForm(ModelForm):
                     "max": 2100,
                 }
             ),
-            "image": URLInput(
+            "image": TextInput(
                 attrs={
-                    "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
+                    "placeholder": "https://example.com/foto.jpg atau /static/img/foto.jpg",
                 }
             ),
             "featured": CheckboxInput(),
