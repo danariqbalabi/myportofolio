@@ -24,7 +24,7 @@
               class="project-form">
             {% csrf_token %}
             {% for field in form %}
-                <div class="form-group">
+                <div class="form-group{% if field.name == 'featured' %} gallery-checkbox{% endif %}">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
                     {% for error in field.errors %}

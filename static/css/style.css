@@ -1303,6 +1303,73 @@ nav ul {
     margin-top: 0.75rem;
 }
 
+.gallery-page .project-search__input {
+    background: var(--paper);
+    color: var(--ink);
+}
+
+.gallery-page .gallery-heading .project-add-button {
+    flex-shrink: 0;
+}
+
+.gallery-page .gallery-card {
+    border-radius: var(--radius);
+}
+
+.gallery-page .gallery-card-body {
+    overflow-wrap: anywhere;
+}
+
+.gallery-page .project-actions {
+    gap: 0.5rem;
+}
+
+.gallery-page .gallery-heading h1 {
+    font-size: 3rem;
+}
+
+.gallery-edit-modal,
+#add-gallery-modal {
+    color: var(--ink);
+}
+
+.gallery-edit-modal .form-group input,
+.gallery-edit-modal .form-group textarea,
+#add-gallery-modal .form-group input,
+#add-gallery-modal .form-group textarea {
+    background: var(--paper);
+    color: var(--ink);
+}
+
+.gallery-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.gallery-checkbox label {
+    margin-bottom: 0;
+}
+
+.gallery-checkbox input[type="checkbox"] {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+    accent-color: var(--accent);
+}
+
+@media (max-width: 600px) {
+    .gallery-page .gallery-heading h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .site-header .main-nav {
+        overflow-x: auto;
+    }
+}
+
 @media (max-width: 700px) {
     .gallery-page {
         padding: 3rem 0;
@@ -1676,6 +1743,8 @@ nav ul {
     background-color: var(--paper);
     border: 1px solid var(--line);
     color: inherit;
+    max-width: min(32rem, calc(100vw - 2rem));
+    overflow-wrap: anywhere;
 }
 
 .toast-component:popover-open {

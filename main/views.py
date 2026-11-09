@@ -215,6 +215,7 @@ def show_gallery(request):
         "name": OWNER_NAME,
         "title_query": request.GET.get("title", "").strip(),
         "form": GalleryItemForm(),
+        "edit_form": GalleryItemForm(auto_id="edit_gallery_%s"),
         **portfolio_permissions(request.user),
     }
     return render(request, "gallery.html", context)

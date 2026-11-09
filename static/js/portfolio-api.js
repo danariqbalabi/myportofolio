@@ -21,6 +21,7 @@ function initPortfolioApi(config) {
     const grid = document.getElementById(config.grid);
     const search = document.getElementById(config.search);
     const form = document.getElementById(config.form);
+    const editForm = config.editForm ? document.getElementById(config.editForm) : null;
     let controller;
     let timer;
 
@@ -64,33 +65,56 @@ function initPortfolioApi(config) {
         return data;
     }
 
-    form?.addEventListener('submit', async event => {
+    async function submitResource(event, targetForm, modal, url, method, message) {
         event.preventDefault();
-        const button = form.querySelector('button[type="submit"]');
+        const button = targetForm.querySelector('button[type="submit"]');
         if (button.disabled) return;
         button.disabled = true;
         try {
-            const fields = new FormData(form);
+            const fields = new FormData(targetForm);
             const payload = Object.fromEntries(config.fields.map(name => [name, fields.get(name)]));
             if (config.checkbox) payload[config.checkbox] = fields.has(config.checkbox);
-            await writeResource(config.list, 'POST', payload);
-            form.reset();
-            document.getElementById(config.modal).hidePopover();
-            showToast('Berhasil', config.createdMessage, 'success');
+            await writeResource(url, method, payload);
+            targetForm.reset();
+            document.getElementById(modal).hidePopover();
+            showToast('Berhasil', message, 'success');
             await fetchResources();
         } catch (error) {
             showToast('Belum berhasil', error.message, 'error');
         } finally { button.disabled = false; }
+    }
+
+    form?.addEventListener('submit', event => {
+        submitResource(event, form, config.modal, config.list, 'POST', config.createdMessage);
+    });
+    editForm?.addEventListener('submit', event => {
+        const url = config.detail.replace(config.placeholder, editForm.dataset.id);
+        submitResource(event, editForm, config.editModal, url, 'PATCH', config.updatedMessage);
     });
 
     grid.addEventListener('click', async event => {
         const button = event.target.closest('button[data-action]');
         if (!button || button.disabled) return;
         const action = button.dataset.action;
-        if (!['star', 'delete'].includes(action)) return;
+        if (!['star', 'delete', 'edit'].includes(action)) return;
         if (action === 'delete' && !window.confirm(config.deleteMessage)) return;
         button.disabled = true;
         try {
+            if (action === 'edit' && editForm) {
+                const url = config.detail.replace(config.placeholder, button.dataset.id);
+                const response = await fetch(url, {headers: {Accept: 'application/json'}});
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.detail || `Permintaan gagal (HTTP ${response.status}).`);
+                editForm.reset();
+                editForm.dataset.id = button.dataset.id;
+                for (const field of config.fields) editForm.elements.namedItem(field).value = data[field] ?? '';
+                if (config.checkbox) editForm.elements.namedItem(config.checkbox).checked = data[config.checkbox];
+                const modal = document.getElementById(config.editModal);
+                modal.showPopover();
+                modal.querySelector('.project-form-modal__content').scrollTop = 0;
+                editForm.elements.namedItem(config.fields[0]).focus({preventScroll: true});
+                return;
+            }
             const pattern = action === 'star' ? config.star : config.detail;
             await writeResource(pattern.replace(config.placeholder, button.dataset.id), action === 'star' ? 'POST' : 'DELETE');
             showToast('Berhasil', action === 'star' ? 'Star berhasil diperbarui.' : 'Data berhasil dihapus.', 'success');

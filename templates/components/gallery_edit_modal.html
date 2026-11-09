@@ -1,0 +1,34 @@
+<div id="edit-gallery-modal"
+     class="project-form-modal gallery-edit-modal"
+     popover="auto"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="edit-gallery-modal-title">
+    <button type="button"
+            class="project-form-modal__backdrop"
+            popovertarget="edit-gallery-modal"
+            popovertargetaction="hide"
+            aria-label="Tutup form edit foto"></button>
+    <div class="project-form-modal__content">
+        <button type="button"
+                class="project-form-modal__close"
+                popovertarget="edit-gallery-modal"
+                popovertargetaction="hide"
+                aria-label="Tutup form edit foto">&times;</button>
+        <h2 id="edit-gallery-modal-title">Edit Foto</h2>
+        <form id="gallery-edit-form" class="project-form">
+            {% csrf_token %}
+            {% for field in edit_form %}
+                <div class="form-group{% if field.name == 'featured' %} gallery-checkbox{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div class="project-form-modal__actions">
+                <button type="button" class="button button-secondary"
+                        popovertarget="edit-gallery-modal" popovertargetaction="hide">Batal</button>
+                <button type="submit" class="button button-primary">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -42,12 +42,22 @@ class ProjectSerializer(serializers.ModelSerializer):
         return ", ".join(user.username for user in obj.starred_by.all())
 
 
-class GalleryItemSerializer(ProjectSerializer):
+class GalleryItemSerializer(serializers.ModelSerializer):
+    star_count = serializers.SerializerMethodField()
+    is_starred = serializers.SerializerMethodField()
+    starred_by_names = serializers.SerializerMethodField()
+
     class Meta:
         model = GalleryItem
         fields = ["id", "title", "caption", "category", "location", "year", "image", "featured",
                   "star_count", "is_starred", "starred_by_names"]
         read_only_fields = ["id"]
+
+    def validate_title(self, value):
+        value = strip_tags(value).strip()
+        if not value:
+            raise serializers.ValidationError("Judul foto tidak boleh kosong atau hanya berisi tag HTML.")
+        return value
 
     def validate_caption(self, value):
         return strip_tags(value).strip()
@@ -72,3 +82,13 @@ class GalleryItemSerializer(ProjectSerializer):
         if not 2000 <= value <= 2100:
             raise serializers.ValidationError("Tahun harus di antara 2000 dan 2100.")
         return value
+
+    def get_star_count(self, obj):
+        return obj.starred_by.count()
+
+    def get_is_starred(self, obj):
+        request = self.context.get("request")
+        return bool(request and request.user.is_authenticated and request.user in obj.starred_by.all())
+
+    def get_starred_by_names(self, obj):
+        return ", ".join(user.username for user in obj.starred_by.all())
