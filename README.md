@@ -10,6 +10,9 @@ Tutorial 07 (Django REST Framework) tersedia untuk Projects dan Gallery.
 Lihat [panduan Tutorial 7](docs/tutorial-7.md) untuk API, peran akses,
 cara menjalankan, pengujian, dan deployment.
 
+Tugas 6 melanjutkan Gallery dengan API DRF dan modal edit tanpa reload.
+Setup, endpoint, serta jawaban reflektif ada di [bagian Tugas 6](#tugas-6).
+
 Tutorial 06 (HTMX) tersedia di `/contacts/`. Panduan menjalankan, fitur,
 latihan, dan pengujian ada di [contacts/README.md](contacts/README.md).
 
@@ -107,6 +110,7 @@ Data pada halaman Experience, Highlights, dan Gallery disimpan di database dan d
 1. Aktifkan virtual environment:
    ```bash
    env\Scripts\activate
+   ```
 2. Jalankan migrasi database: python manage.py migrate
 3. Jalankan server: python manage.py runserver
 4. Buka web di local http://127.0.0.1:8000
@@ -124,7 +128,7 @@ Page URL baru
 - Ketika user membuka halaman portofolio saya yang terbaru, browser mengirimkan HTTP request ke alamat URL, misalnya `/gallery/` atau `/highlight/`
 - Request tersebut akan langsung diterima oleh `portofolio/urls.py` sebagai URL configuration utama project porto ini. Pada file tersebut, pola URL kosong diarahkan ke `main.urls` menggunakan `include("main.urls")` yg tersedia.
 - Lalu, Django mencari pola URL yang sesuai di `main/urls.py`. Contohnya utk alamat `/gallery/`, Django menemukan named route `show_gallery` yang mengarah ke function view `show_gallery` di `main/views.py`.
-- View kemudian mengambil data dari model `GalleryItem` menggunakan query: ```python GalleryItem.objects.all().order_by("-featured", "-year")
+- View kemudian mengambil data dari model `GalleryItem` menggunakan query: `GalleryItem.objects.all().order_by("-featured", "-year")`
 - Data tersebut akan masuk ke context dengan nama (contohnya) gallery_items, lalu dikirim ke template gallery.html menggunakan fungsi render().
 - Di dalam gallery.html, Django Template Language melakukan perulangan terhadap gallery_items. Setiap objek ditampilkan sebagai kartu gallery yang berisi judul, caption, lokasi, tahun, dan gambar. Jika tidak ada data, bagian {% empty %} menampilkan pesan bahwa belum ada foto di gallery.
 - Setelah template selesai diproses, Django mengirimkan HTML sebagai HTTP response kepada browser. Browser kemudian merender HTML tersebut dan memuat file CSS serta gambar dari folder static sehingga halaman dapat ditampilkan secara utuh.
@@ -178,25 +182,34 @@ Dengan implementasi ini, data portofolio tidak lagi ditulis secara hardcode di H
 1. Aktifkan virtual environment:
 ```bash
 env\Scripts\activate
+```
 
 2. Pastikan dependencies udah aktif:
-'''pip install -r requirements.txt'''
+```bash
+pip install -r requirements.txt
+```
 
 3. Jalankan migrasi db:
+```bash
 python manage.py makemigrations
 python manage.py migrate
+```
 
 4. Jalankan checker Django
+```bash
 python manage.py check
+```
 
 5. Run serve Django:
+```bash
 python manage.py runserver
+```
 
 6. Buka website lewat local:
-'''http://127.0.0.1:8000'''
+`http://127.0.0.1:8000`
 
 
-### Setup Minggu 3
+### Tugas 3
 
 1. Jelaskan mengapa menggunakan ModelForm dan mengapa perlu menambahkan {% csrf_token %} pada form.
 Saya menggunakan ModelForm dibandingkan membuat form HTML secara manual karena ModelForm memudahkan proses pembuatan form dengan cara ambil lansgung struktur field dari model yang sudah dibuat sebelumnya, seperti Highlight / Project. Sehingga saya tidak perlu menuliskan setiap elemen <input> secara manual lagi. Selain itu, validasi data juga otomatis mengikuti tipe field yang ada di model. Misalnya field year akan divalidasi sebagai angka dan field seperti thumbnail atau URL akan mengikuti aturan validasi URL yang sudah tersedia di Django.
@@ -384,3 +397,104 @@ Bagian yang tetap saya tentukan sendiri:
 Strategi prompting yang saya gunakan adalah meminta Codex mengecek instruksi terlebih dahulu, lalu mengerjakan fitur per tahap sendiridan melakukan commit yg punya cakupan yang jelas. Saya juga meminta Codex menjalankan test setelah setiap tahap supaya bug dapat ditemukan sebelum push ke GitHub atau PWS.
 
 https://chatgpt.com/s/cx_6aa7b6345100819186c6964a7cc1c47d
+
+### Perkembangan Tugas 6
+
+Gallery sekarang memakai Django REST Framework, melanjutkan API dari Tutorial 07. Model dan foto lama tetap digunakan. Daftar foto dan pencarian memakai GET, tambah foto memakai POST, edit memakai PATCH, hapus memakai DELETE, dan tombol star memakai POST.
+
+Edit foto bisa dilakukan langsung dari modal di Gallery. Setelah disimpan, kartu dan jumlah star dimuat ulang tanpa reload halaman, dengan kata pencarian yang tetap sama. Halaman edit lama juga masih tersedia dan mengirim PATCH ke API.
+
+Validasi Gallery ada di `GalleryItemSerializer`, terpisah dari serializer Projects. Judul, caption, kategori, dan lokasi dibersihkan dengan `strip_tags`. Judul yang kosong setelah dibersihkan ditolak. Tahun dibatasi 2000-2100, sedangkan gambar menerima URL HTTP/HTTPS atau path `/static/` agar foto lama tetap bisa dipakai. Escaping di JavaScript tetap dilakukan untuk data yang ditampilkan.
+
+### Setup Tugas 6
+
+Jalankan dari folder yang berisi `manage.py` setelah virtual environment aktif:
+
+```bash
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py check
+python manage.py runserver
+```
+
+Buka `/gallery/` untuk halaman Gallery atau `/api/v1/gallery/` untuk Browsable API. Login memakai akun website yang sudah ada. Untuk membuat akun pemilik di database lokal, jalankan `python manage.py createsuperuser`. Akun lokal dan akun di PWS memakai database berbeda.
+
+| Endpoint | Method | Kegunaan |
+| --- | --- | --- |
+| `/api/v1/gallery/` | GET | Daftar foto; tambahkan `?title=bangkok` untuk mencari judul |
+| `/api/v1/gallery/` | POST | Tambah foto |
+| `/api/v1/gallery/<id>/` | GET | Detail foto |
+| `/api/v1/gallery/<id>/` | PUT / PATCH | Ubah foto |
+| `/api/v1/gallery/<id>/` | DELETE | Hapus foto |
+| `/api/v1/gallery/<id>/star/` | POST | Beri atau batalkan star |
+
+ID Gallery berupa angka, sedangkan ID Projects tetap UUID. Nama URL Gallery ada di namespace `api`, yaitu `gallery-list`, `gallery-detail`, dan `gallery-star`.
+
+| Peran | Baca | Star | Edit | Tambah / Hapus |
+| --- | --- | --- | --- | --- |
+| Guest | Ya | Tidak | Tidak | Tidak |
+| User biasa | Ya | Ya | Tidak | Tidak |
+| Editor | Ya | Ya | Ya | Tidak |
+| Superuser | Ya | Ya | Ya | Ya |
+
+Editor adalah anggota group `Editor`. Status staff saja tidak memberi hak edit. Permission diperiksa di server, termasuk pada endpoint lama. Star selalu memakai akun dari `request.user`; ID akun yang dikirim lewat body tidak dipakai.
+
+API mengembalikan objek JSON datar dengan `id`, `title`, `caption`, `category`, `location`, `year`, `image`, `featured`, `star_count`, `is_starred`, dan `starred_by_names`. ID dan informasi star hanya bisa dibaca. Email dan password akun tidak ikut dikirim.
+
+Status response: 200 untuk baca/update/star, 201 untuk tambah, 204 dengan body kosong untuk hapus, 400 untuk validasi gagal, 403 untuk akses atau CSRF yang ditolak, dan 404 untuk foto yang tidak ada. Pesan kegagalan operasi ditampilkan lewat toast tanpa menghapus input yang belum tersimpan.
+
+### Pengujian Tugas 6
+
+```bash
+python manage.py test main
+python manage.py test main contacts
+python manage.py makemigrations --check --dry-run
+```
+
+Test API memeriksa keempat peran, pencarian, PUT/PATCH, sanitasi teks, field read-only, data yang tidak ditemukan, dan star. Pada request yang ditolak, test juga membandingkan isi database sebelum dan sesudahnya. Test CSRF memakai `APIClient(enforce_csrf_checks=True)` dan `.login()`, lalu membandingkan request tanpa token dan dengan token yang diambil dari halaman Gallery.
+
+Untuk test browser opsional:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m playwright install chromium
+python manage.py test main.browser_checks contacts.browser_checks
+```
+
+Jika memakai Edge yang sudah terpasang di Windows, langkah install Chromium bisa dilewati. Set `$env:CONTACTS_BROWSER_CHANNEL = 'msedge'` di PowerShell sebelum menjalankan test browser.
+
+Test browser memakai database pengujian terpisah. Skenarionya mencakup tambah, edit modal, star, hapus, pencarian debounce, loading/empty/error, coba ulang saat jaringan gagal, toast 400/403, XSS, dan tampilan desktop/HP. Alur Projects dan halaman Contacts ikut diperiksa sebagai regresi.
+
+Setelah branch digabung untuk deployment, pastikan dependency PWS terpasang dari `requirements.txt` dan migrasi dijalankan pada database PWS. Cek `/api/v1/gallery/` dan alur login/tambah/edit/star/hapus di `/gallery/`. Tidak ada perubahan model baru khusus Tugas 6.
+
+### Tugas 6
+
+1. **REST dan perbedaan PUT/PATCH**
+
+   REST adalah gaya perancangan API yang melihat data sebagai resource dengan alamat dan operasi yang konsisten. Contohnya satu foto di `/api/v1/gallery/12/`: GET untuk membaca, PUT/PATCH untuk mengubah, dan DELETE untuk menghapus. JSON hanya format data, jadi API yang mengembalikan JSON belum tentu mengikuti REST jika method, URL, dan status responsnya tidak sesuai operasi.
+
+   PUT mengirim representasi lengkap field yang dapat diubah, sedangkan PATCH mengirim field yang perlu diganti saja. Misalnya seluruh form foto dikirim dengan PUT ketika mengganti data foto secara lengkap. Kalau hanya ingin memperbaiki caption, cukup PATCH dengan `{"caption": "Caption baru"}`. Field lain tidak perlu ikut dikirim. Pada implementasi DRF ini, PUT tetap memerlukan field wajib; PATCH menggunakan `partial=True`.
+
+2. **Peran serializer**
+
+   Serializer mengubah objek model menjadi data yang bisa dikirim sebagai JSON, sekaligus memvalidasi data yang masuk sebelum disimpan. Di Gallery, daftar field ditulis eksplisit supaya field internal tidak ikut keluar. `validate_title` membersihkan tag HTML dan menolak judul kosong, sementara jumlah serta status star dihitung sebagai field read-only.
+
+   Dibanding merakit dictionary dengan `JsonResponse`, serializer membuat aturan baca, validasi, dan penyimpanan lebih terpusat. Endpoint tambah dan edit bisa memakai aturan yang sama. Error juga dikembalikan per field sehingga frontend bisa menampilkan pesan yang jelas, dan client tidak bisa mengubah jumlah star hanya dengan mengirim angka baru.
+
+3. **Autentikasi dan otorisasi**
+
+   Autentikasi menentukan siapa yang mengirim request. Dengan `SessionAuthentication`, DRF mengenali akun dari sesi login Django. Otorisasi menentukan apa yang boleh dilakukan akun itu. Misalnya Editor dikenali sebagai user yang sudah login, tetapi hanya boleh mengubah foto dan tidak boleh menghapusnya.
+
+   Permission class harus bekerja di server karena orang bisa langsung memanggil URL API tanpa melewati tombol di halaman. Menyembunyikan tombol hanya membantu tampilan. Di API Gallery, `IsPortfolioOwnerOrEditorOrReadOnly` mengatur akses daftar/detail, sedangkan `IsAuthenticated` membatasi endpoint star.
+
+4. **SessionAuthentication, CSRF, dan pengujiannya**
+
+   Browser otomatis mengirim cookie sesi pada request ke website. Karena itu, request yang mengubah data masih perlu token CSRF agar server dapat menolak request dari situs lain yang mencoba memakai sesi pengguna. Frontend mengirim token lewat `X-CSRFToken`, termasuk saat memakai PATCH dan DELETE. Halaman Gallery juga menyertakan `{% csrf_token %}` agar cookie token tersedia untuk user biasa dan Editor.
+
+   `force_authenticate` membantu menguji aturan role, tetapi melewati proses autentikasi sebenarnya. Jadi test itu belum membuktikan pemeriksaan session dan CSRF bekerja. Test CSRF harus memakai client dengan `enforce_csrf_checks=True` dan login sebenarnya, lalu memastikan request tanpa token ditolak dan database tetap sama. Request dengan token yang valid baru boleh berhasil.
+
+Referensi: [Serializer DRF](https://www.django-rest-framework.org/api-guide/serializers/), [Permission DRF](https://www.django-rest-framework.org/api-guide/permissions/), [SessionAuthentication](https://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication), dan [Testing DRF](https://www.django-rest-framework.org/api-guide/testing/).
+
+### AI Disclosure Tugas 6
+
+[Log penggunaan AI](https://chatgpt.com/s/cx_6af14956c9388191a7556f15cb545d94)

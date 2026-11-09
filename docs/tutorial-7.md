@@ -60,6 +60,8 @@ header `Accept: application/json` untuk JSON.
 - Form edit Gallery mengirim PATCH ke API, termasuk ketika dipakai Editor.
   Form tambah mandiri Gallery juga menggunakan POST API. Halaman dan endpoint
   lama tetap ada untuk kompatibilitas dengan pekerjaan sebelumnya.
+  Tugas 6 menambahkan modal edit langsung di Gallery; detailnya ada di
+  [README bagian Tugas 6](../README.md#tugas-6).
 - Projects dapat diubah memakai PUT/PATCH API; tautan halaman edit lama tetap
   tersedia untuk pemilik. Helper `writeProject` dan `projectEndpoint` tersedia
   di Console halaman Projects, mengikuti pola tutorial.
@@ -99,6 +101,10 @@ memeriksa CRUD, PATCH, star, filter, session/CSRF, Editor, error jaringan,
 validasi dan XSS. Dua tes browser kontak memeriksa regresi Tutorial 06.
 Test account hanya dibuat di database pengujian; tidak ada password produksi
 yang disimpan dalam kode atau dokumentasi.
+
+Catatan Tugas 6: jumlah tes bertambah dan tes browser Gallery kini memakai
+modal edit. Gunakan perintah tes di atas untuk hasil terbaru, serta
+`requirements-dev.txt` untuk memasang dependency pengujian browser.
 
 ## Deployment dan pengumpulan
 
