@@ -12,7 +12,7 @@ class GalleryAPITest(APITestCase):
         cls.owner = User.objects.create_superuser("owner", "owner@example.com", "test-password")
         cls.editor = User.objects.create_user("editor", password="test-password")
         cls.editor.groups.add(Group.objects.get_or_create(name="Editor")[0])
-        cls.visitor = User.objects.create_user("visitor", password="test-password")
+        cls.visitor = User.objects.create_user("visitor", email="visitor@example.com", password="test-password")
         cls.staff = User.objects.create_user("staff", password="test-password", is_staff=True)
 
     def setUp(self):
@@ -43,9 +43,11 @@ class GalleryAPITest(APITestCase):
         self.assertEqual(self.item.title, "Updated")
         self.assertEqual(self.item.caption, "Morning hike")
         self.assertEqual(self.client.put(self.detail_url, self.payload, format="json").status_code, 200)
+        before = list(GalleryItem.objects.values())
         self.assertEqual(self.client.post(self.list_url, self.payload, format="json").status_code, 403)
+        self.assertEqual(list(GalleryItem.objects.values()), before)
         self.assertEqual(self.client.delete(self.detail_url).status_code, 403)
-        self.assertEqual(GalleryItem.objects.count(), 1)
+        self.assertEqual(list(GalleryItem.objects.values()), before)
 
     def test_guest_visitor_and_staff_cannot_manage(self):
         before = list(GalleryItem.objects.values())
@@ -120,12 +122,16 @@ class GalleryAPITest(APITestCase):
 
     def test_star_uses_session_user_and_computed_fields_read_only(self):
         self.assertEqual(self.client.post(self.star_url).status_code, 403)
-        for user in (self.visitor, self.editor):
+        self.assertEqual(self.item.starred_by.count(), 0)
+        for user in (self.visitor, self.editor, self.owner):
             self.client.force_authenticate(user)
-            response = self.client.post(self.star_url, {"user_id": self.owner.pk}, format="json")
+            response = self.client.post(self.star_url, {"user_id": self.staff.pk}, format="json")
+            self.assertEqual(response.status_code, 200)
             self.assertTrue(response.data["is_starred"])
-            self.assertFalse(self.item.starred_by.filter(pk=self.owner.pk).exists())
+            self.assertEqual(list(self.item.starred_by.all()), [user])
+            self.assertFalse(self.item.starred_by.filter(pk=self.staff.pk).exists())
             self.assertFalse(self.client.post(self.star_url).data["is_starred"])
+            self.assertEqual(self.item.starred_by.count(), 0)
         self.client.force_authenticate(self.owner)
         response = self.client.patch(self.detail_url, {"star_count": 99, "is_starred": True,
             "starred_by": [self.visitor.pk], "starred_by_names": "forged"}, format="json")
@@ -134,19 +140,98 @@ class GalleryAPITest(APITestCase):
         self.assertNotIn("email", response.data)
         self.assertNotIn("password", response.data)
 
+    def test_public_responses_only_expose_gallery_and_star_fields(self):
+        self.item.starred_by.add(self.visitor)
+        expected_fields = {
+            "id", "title", "caption", "category", "location", "year", "image", "featured",
+            "star_count", "is_starred", "starred_by_names",
+        }
+        for user in (None, self.visitor, self.editor, self.owner):
+            self.client.force_authenticate(user)
+            with self.subTest(user=user):
+                listing = self.client.get(self.list_url)
+                detail = self.client.get(self.detail_url)
+                self.assertEqual(listing.status_code, 200)
+                self.assertEqual(detail.status_code, 200)
+                for data in (listing.data[0], detail.data):
+                    self.assertEqual(set(data), expected_fields)
+                    self.assertEqual(data["star_count"], 1)
+                    self.assertEqual(data["is_starred"], user == self.visitor)
+                    self.assertNotIn(self.visitor.email, str(data))
+                    self.assertNotIn(self.visitor.password, str(data))
+
+    def test_create_ignores_injected_star_fields(self):
+        self.client.force_authenticate(self.owner)
+        response = self.client.post(self.list_url, {
+            **self.payload, "id": 123456, "star_count": 50, "is_starred": True,
+            "starred_by_names": "fake", "starred_by": [self.visitor.pk],
+        }, format="json")
+        self.assertEqual(response.status_code, 201)
+        item = GalleryItem.objects.get(pk=response.data["id"])
+        self.assertNotEqual(item.pk, 123456)
+        self.assertEqual(item.starred_by.count(), 0)
+        self.assertEqual(response.data["star_count"], 0)
+        self.assertFalse(response.data["is_starred"])
+
     def test_real_session_csrf_for_update_delete_and_star(self):
         client = APIClient(enforce_csrf_checks=True)
         self.assertTrue(client.login(username="editor", password="test-password"))
+        before = list(GalleryItem.objects.values())
         self.assertEqual(client.patch(self.detail_url, {"title": "Changed"}, format="json").status_code, 403)
         self.assertEqual(client.post(self.star_url).status_code, 403)
+        self.assertEqual(list(GalleryItem.objects.values()), before)
+        self.assertEqual(self.item.starred_by.count(), 0)
         client.get(reverse("main:show_gallery"))
         token = client.cookies["csrftoken"].value
         self.assertEqual(client.patch(self.detail_url, {"title": "Changed"}, format="json", HTTP_X_CSRFTOKEN=token).status_code, 200)
         self.assertEqual(client.post(self.star_url, HTTP_X_CSRFTOKEN=token).status_code, 200)
-        client.force_login(self.owner)
+        client.logout()
+        self.assertTrue(client.login(username="owner", password="test-password"))
+        before = list(GalleryItem.objects.values())
         self.assertEqual(client.delete(self.detail_url).status_code, 403)
+        self.assertEqual(list(GalleryItem.objects.values()), before)
         client.get(reverse("main:show_gallery"))
         self.assertEqual(client.delete(self.detail_url, HTTP_X_CSRFTOKEN=client.cookies["csrftoken"].value).status_code, 204)
+
+    def test_real_session_create_requires_csrf(self):
+        client = APIClient(enforce_csrf_checks=True)
+        self.assertTrue(client.login(username="owner", password="test-password"))
+        before = list(GalleryItem.objects.values())
+        response = client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(list(GalleryItem.objects.values()), before)
+        client.get(reverse("main:show_gallery"))
+        response = client.post(self.list_url, self.payload, format="json",
+                              HTTP_X_CSRFTOKEN=client.cookies["csrftoken"].value)
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(GalleryItem.objects.filter(pk=response.data["id"]).exists())
+
+    def test_browsable_api_and_missing_mutation_targets(self):
+        self.assertEqual(self.client.get(self.list_url, HTTP_ACCEPT="text/html").status_code, 200)
+        self.client.force_authenticate(self.owner)
+        detail = reverse("api:gallery-detail", args=[99999])
+        before = list(GalleryItem.objects.values())
+        for method in ("put", "patch", "delete"):
+            with self.subTest(method=method):
+                response = getattr(self.client, method)(detail, self.payload, format="json")
+                self.assertEqual(response.status_code, 404)
+        self.assertEqual(self.client.post(reverse("api:gallery-star", args=[99999])).status_code, 404)
+        self.assertEqual(list(GalleryItem.objects.values()), before)
+
+    def test_legacy_gallery_views_keep_the_same_roles(self):
+        for user in (self.visitor, self.editor):
+            self.client.force_login(user)
+            before = list(GalleryItem.objects.values())
+            self.assertEqual(self.client.post(reverse("main:create_gallery_item"), self.payload).status_code, 403)
+            self.assertEqual(self.client.post(reverse("main:delete_gallery_item", args=[self.item.pk])).status_code, 403)
+            self.assertEqual(self.client.post(reverse("main:create_gallery_item_ajax"), self.payload).status_code, 403)
+            self.assertEqual(list(GalleryItem.objects.values()), before)
+        self.client.force_login(self.editor)
+        response = self.client.post(reverse("main:update_gallery_item", args=[self.item.pk]),
+                                    {**self.payload, "title": "Editor via form lama"})
+        self.assertEqual(response.status_code, 302)
+        self.item.refresh_from_db()
+        self.assertEqual(self.item.title, "Editor via form lama")
 
     def test_bad_json_methods_and_permission_before_lookup(self):
         self.client.force_authenticate(self.owner)
