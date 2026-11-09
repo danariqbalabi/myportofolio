@@ -548,3 +548,6 @@ Referensi: [Serializer DRF](https://www.django-rest-framework.org/api-guide/seri
 ### AI Disclosure Tugas 6
 
 [Log penggunaan AI](https://chatgpt.com/s/cx_6af14956c9388191a7556f15cb545d94)
+- Membantu mengisi README.md
+- Brainstorming langkah apa dulu yang harus dikerjakan
+- Finalisasi tugas apakah sudah sesuai?
