@@ -30,7 +30,7 @@
                            placeholder="Cari berdasarkan judul foto"
                            class="project-search__input"
                            aria-label="Cari berdasarkan judul foto">
-                    <button type="submit" class="button">Cari</button>
+                    <button type="submit" class="button button-primary">Cari</button>
                 </form>
 
                 <div id="gallery-loading" class="empty-state hide">
@@ -39,6 +39,7 @@
 
                 <div id="gallery-error" class="empty-state hide">
                     <p>Gagal memuat data gallery. Silakan coba lagi.</p>
+                    <button type="button" id="gallery-retry" class="button button-secondary">Coba lagi</button>
                 </div>
 
                 <div id="gallery-empty" class="empty-state hide">
@@ -52,6 +53,9 @@
 
     {% if can_create_portfolio %}
         {% include "components/gallery_form_modal.html" %}
+    {% endif %}
+    {% if can_edit_portfolio %}
+        {% include "components/gallery_edit_modal.html" %}
     {% endif %}
 
     {% include "components/gallery_api.html" %}
