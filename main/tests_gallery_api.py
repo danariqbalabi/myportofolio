@@ -2,9 +2,8 @@ from django.contrib.auth.models import Group, User
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
 
-from .models import GalleryItem
-from .serializers import ProjectSerializer
-from .models import Project
+from .models import GalleryItem, Project
+from .serializers import GalleryItemSerializer, ProjectSerializer
 
 
 class GalleryAPITest(APITestCase):
@@ -49,12 +48,16 @@ class GalleryAPITest(APITestCase):
         self.assertEqual(GalleryItem.objects.count(), 1)
 
     def test_guest_visitor_and_staff_cannot_manage(self):
+        before = list(GalleryItem.objects.values())
         for user in (None, self.visitor, self.staff):
             self.client.force_authenticate(user)
             for method, url in [("post", self.list_url), ("put", self.detail_url),
                                 ("patch", self.detail_url), ("delete", self.detail_url)]:
                 with self.subTest(user=user, method=method):
-                    self.assertEqual(getattr(self.client, method)(url, self.payload, format="json").status_code, 403)
+                    payload = {**self.payload, "title": "Tidak boleh tersimpan", "featured": True}
+                    self.assertEqual(getattr(self.client, method)(url, payload, format="json").status_code, 403)
+                    self.assertEqual(list(GalleryItem.objects.values()), before)
+                    self.assertEqual(self.item.starred_by.count(), 0)
         self.assertEqual(GalleryItem.objects.count(), 1)
 
     def test_owner_create_update_delete(self):
@@ -72,16 +75,48 @@ class GalleryAPITest(APITestCase):
 
     def test_validation_and_html_stripping(self):
         self.client.force_authenticate(self.owner)
+        before = list(GalleryItem.objects.values())
         for field, value in [("title", "<b></b>"), ("image", "javascript:alert(1)"),
                              ("image", "data:text/html,x"), ("image", "/static/../secret"), ("year", 0)]:
             response = self.client.post(self.list_url, {**self.payload, field: value}, format="json")
             self.assertEqual(response.status_code, 400)
             self.assertIn(field, response.data)
+            self.assertEqual(list(GalleryItem.objects.values()), before)
         response = self.client.post(self.list_url, {**self.payload, "title": "<b>Clean</b>",
             "caption": "<i>caption</i>", "image": "https://example.com/image.jpg"}, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data["title"], "Clean")
         self.assertEqual(response.data["caption"], "caption")
+
+    def test_invalid_patch_does_not_change_other_fields(self):
+        self.client.force_authenticate(self.editor)
+        before = list(GalleryItem.objects.values())
+        response = self.client.patch(self.detail_url, {
+            "title": '<img src="x" onerror="alert(1)">', "caption": "Jangan disimpan",
+        }, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("title", response.data)
+        self.assertEqual(list(GalleryItem.objects.values()), before)
+
+    def test_gallery_text_fields_and_year_bounds(self):
+        self.client.force_authenticate(self.owner)
+        response = self.client.patch(self.detail_url, {
+            "title": " <b>Foto baru</b> ", "caption": " <i>Caption</i> ",
+            "category": " <b>Travel</b> ", "location": " <span>Bogor</span> ",
+        }, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.item.refresh_from_db()
+        self.assertEqual(self.item.title, "Foto baru")
+        self.assertEqual(self.item.caption, "Caption")
+        self.assertEqual(self.item.category, "Travel")
+        self.assertEqual(self.item.location, "Bogor")
+        for year in (1999, 2101):
+            with self.subTest(year=year):
+                response = self.client.patch(self.detail_url, {"year": year}, format="json")
+                self.assertEqual(response.status_code, 400)
+                self.item.refresh_from_db()
+                self.assertEqual(self.item.year, 2026)
+        self.assertEqual(GalleryItemSerializer(self.item).data["is_starred"], False)
 
     def test_star_uses_session_user_and_computed_fields_read_only(self):
         self.assertEqual(self.client.post(self.star_url).status_code, 403)
